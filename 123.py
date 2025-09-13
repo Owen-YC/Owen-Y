@@ -12,7 +12,7 @@ def load_css():
     <style>
     /* 전체 페이지 스타일 */
     .main {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
         min-height: 100vh;
     }
     
@@ -24,8 +24,14 @@ def load_css():
         padding: 2rem;
         margin-bottom: 2rem;
         box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(108, 117, 125, 0.2);
         animation: slideInDown 0.8s ease-out;
+        transition: all 0.3s ease;
+    }
+    
+    .header-container:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
     }
     
     @keyframes slideInDown {
@@ -41,7 +47,7 @@ def load_css():
     
     /* 타이틀 스타일 */
     .main-title {
-        background: linear-gradient(45deg, #667eea, #764ba2);
+        background: linear-gradient(45deg, #495057, #6c757d);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
@@ -50,6 +56,12 @@ def load_css():
         text-align: center;
         margin-bottom: 0.5rem;
         animation: fadeInUp 1s ease-out 0.2s both;
+        transition: all 0.3s ease;
+    }
+    
+    .main-title:hover {
+        background: linear-gradient(45deg, #343a40, #495057);
+        transform: scale(1.02);
     }
     
     @keyframes fadeInUp {
@@ -96,12 +108,12 @@ def load_css():
     
     /* 사용자 메시지 스타일 */
     .user-message {
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #6c757d, #495057);
         color: white;
         padding: 1rem 1.5rem;
         border-radius: 18px 18px 4px 18px;
         margin: 0.5rem 0;
-        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        box-shadow: 0 4px 15px rgba(108, 117, 125, 0.3);
         animation: slideInRight 0.5s ease-out;
     }
     
@@ -118,14 +130,14 @@ def load_css():
     
     /* 어시스턴트 메시지 스타일 */
     .assistant-message {
-        background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-        color: #333;
+        background: linear-gradient(135deg, #ffffff, #f8f9fa);
+        color: #495057;
         padding: 1rem 1.5rem;
         border-radius: 18px 18px 18px 4px;
         margin: 0.5rem 0;
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         animation: slideInLeft 0.5s ease-out;
-        border-left: 4px solid #667eea;
+        border-left: 4px solid #6c757d;
     }
     
     @keyframes slideInLeft {
@@ -151,8 +163,8 @@ def load_css():
     }
     
     .stTextInput > div > div > input:focus {
-        border-color: #667eea;
-        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        border-color: #6c757d;
+        box-shadow: 0 0 0 3px rgba(108, 117, 125, 0.1);
         outline: none;
     }
     
@@ -175,12 +187,12 @@ def load_css():
     
     /* 타이핑 애니메이션 */
     .typing-animation {
-        border-right: 2px solid #667eea;
+        border-right: 2px solid #6c757d;
         animation: blink 1s infinite;
     }
     
     @keyframes blink {
-        0%, 50% { border-color: #667eea; }
+        0%, 50% { border-color: #6c757d; }
         51%, 100% { border-color: transparent; }
     }
     
@@ -239,41 +251,41 @@ def load_css():
     
     /* 빠른 질문 버튼 스타일 */
     .stButton > button {
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #6c757d, #495057);
         color: white;
         border: none;
         border-radius: 15px;
         padding: 0.75rem 1rem;
         font-weight: 500;
         transition: all 0.3s ease;
-        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        box-shadow: 0 4px 15px rgba(108, 117, 125, 0.3);
     }
     
     .stButton > button:hover {
         transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
-        background: linear-gradient(135deg, #5a6fd8, #6a4190);
+        box-shadow: 0 6px 20px rgba(108, 117, 125, 0.4);
+        background: linear-gradient(135deg, #5a6268, #343a40);
     }
     
     /* 사이드바 버튼 스타일 */
     .stSidebar .stButton > button {
-        background: linear-gradient(135deg, #28a745, #20c997);
+        background: linear-gradient(135deg, #6c757d, #495057);
         border-radius: 10px;
         margin-bottom: 0.5rem;
     }
     
     .stSidebar .stButton > button:hover {
-        background: linear-gradient(135deg, #218838, #1ea085);
+        background: linear-gradient(135deg, #5a6268, #343a40);
     }
     
     /* 다운로드 버튼 스타일 */
     .stDownloadButton > button {
-        background: linear-gradient(135deg, #17a2b8, #138496);
+        background: linear-gradient(135deg, #6c757d, #495057);
         border-radius: 10px;
     }
     
     .stDownloadButton > button:hover {
-        background: linear-gradient(135deg, #138496, #117a8b);
+        background: linear-gradient(135deg, #5a6268, #343a40);
     }
     
     /* 반응형 디자인 */
@@ -310,7 +322,7 @@ def main():
     # 헤더 컨테이너
     st.markdown("""
     <div class="header-container">
-        <h1 class="main-title">🤖 SCM 리스크 전략 챗봇</h1>
+        <h1 class="main-title">SCM AI Agent</h1>
         <p class="subtitle">Google 검색을 통해 최신 정보를 반영하여 SCM 리스크 시나리오 전략을 제안합니다.</p>
     </div>
     """, unsafe_allow_html=True)
@@ -363,12 +375,6 @@ def main():
             <span style="color: #28a745; font-weight: 500;">온라인</span>
         </div>
         """, unsafe_allow_html=True)
-        
-        # 통계 정보
-        st.markdown("### 📊 통계")
-        st.metric("총 메시지 수", len(st.session_state.messages))
-        user_messages = len([msg for msg in st.session_state.messages if msg["role"] == "user"])
-        st.metric("사용자 질문 수", user_messages)
     
     # 메인 컨텐츠 영역
     st.markdown("""
