@@ -1138,22 +1138,22 @@ def display_advanced_dashboard():
     ]
     
     for airport in major_airports:
-        # 공항 정보 팝업
+        # 공항 정보 팝업 (컴팩트한 디자인)
         airport_info = f"""
-        <div style="font-family: Arial; font-size: 12px; line-height: 1.4; width: 150px;">
-            <div style="background: #e3f2fd; padding: 8px; border-radius: 5px; border-left: 3px solid #2196f3;">
-                <b style="color: #1976d2; font-size: 14px;">✈️ {airport["name"]}</b><br>
-                <span style="color: #424242;">{airport["city"]}</span><br>
-                <small style="color: #666;">Major Hub Airport</small>
+        <div style="font-family: Arial; font-size: 10px; line-height: 1.2; width: 120px;">
+            <div style="background: #e3f2fd; padding: 5px; border-radius: 3px; border-left: 2px solid #2196f3;">
+                <b style="color: #1976d2; font-size: 11px;">✈️ {airport["name"]}</b><br>
+                <span style="color: #424242; font-size: 9px;">{airport["city"]}</span><br>
+                <small style="color: #666; font-size: 8px;">Hub Airport</small>
             </div>
         </div>
         """
         
         folium.Marker(
             [airport["lat"], airport["lon"]],
-            popup=folium.Popup(airport_info, max_width=200),
+            popup=folium.Popup(airport_info, max_width=130, max_height=80),
             tooltip=f"{airport['name']} - {airport['city']}",
-            icon=folium.Icon(color='blue', icon='plane', prefix='fa')
+            icon=folium.Icon(color='blue', icon='plane', prefix='fa', icon_size=(10, 10))
         ).add_to(m)
     
     # 캐싱된 항공편 위치 및 정보 사용
@@ -1161,16 +1161,15 @@ def display_advanced_dashboard():
     flight_details = st.session_state.get("flight_details", [])
     
     for i, (pos, details) in enumerate(zip(flight_positions, flight_details)):
-        # 항공편 정보 생성 (더 상세한 정보)
+        # 항공편 정보 생성 (컴팩트한 디자인)
         flight_info = f"""
-        <div style="font-family: Arial; font-size: 11px; line-height: 1.3; width: 180px;">
-            <div style="background: #f8f9fa; padding: 8px; border-radius: 5px; border-left: 3px solid #007bff;">
-                <b style="color: #007bff; font-size: 13px;">✈️ {details['flight_number']}</b><br>
-                <span style="color: #28a745; font-weight: bold;">{details['status']}</span><br><br>
-                <b>Route:</b> {details['route']}<br>
-                <b>Altitude:</b> {details['altitude']}<br>
-                <b>Speed:</b> {details['speed']}<br>
-                <small style="color: #6c757d;">Click for details</small>
+        <div style="font-family: Arial; font-size: 10px; line-height: 1.2; width: 140px;">
+            <div style="background: #ffffff; padding: 6px; border-radius: 4px; border: 1px solid #ddd; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <b style="color: #007bff; font-size: 11px;">✈️ {details['flight_number']}</b><br>
+                <span style="color: #28a745; font-weight: bold; font-size: 9px;">{details['status']}</span><br>
+                <b style="font-size: 9px;">Route:</b> <span style="font-size: 9px;">{details['route']}</span><br>
+                <b style="font-size: 9px;">Alt:</b> <span style="font-size: 9px;">{details['altitude']}</span><br>
+                <b style="font-size: 9px;">Speed:</b> <span style="font-size: 9px;">{details['speed']}</span>
             </div>
         </div>
         """
@@ -1182,15 +1181,16 @@ def display_advanced_dashboard():
             "Boarding": "blue",
             "In Flight": "red",
             "Approaching": "purple",
-            "Departed": "gray"
+            "Departed": "gray",
+            "Landed": "darkgreen"
         }
         color = status_colors.get(details['status'], 'red')
         
         folium.Marker(
             [pos["lat"], pos["lon"]],
-            popup=folium.Popup(flight_info, max_width=200),
+            popup=folium.Popup(flight_info, max_width=150, max_height=120),
             tooltip=f"{details['flight_number']} - {details['status']}",
-            icon=folium.Icon(color=color, icon='plane', prefix='fa')
+            icon=folium.Icon(color=color, icon='plane', prefix='fa', icon_size=(12, 12))
         ).add_to(m)
     
     # 지도 크기를 1496*471에 맞게 조정
