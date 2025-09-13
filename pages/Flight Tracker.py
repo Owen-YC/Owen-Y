@@ -831,8 +831,17 @@ def display_airport_status(airport_code: str):
     # 지연 차트
     st.markdown('<h3 class="section-title">📊 시간대별 지연 현황</h3>', unsafe_allow_html=True)
     
-    hours = list(range(24))
-    delays = [np.random.randint(0, 60) for _ in hours]
+    # 세션 상태에 데이터 캐싱
+    if "delay_chart_data" not in st.session_state:
+        hours = list(range(24))
+        # 고정된 시드로 일관된 데이터 생성
+        np.random.seed(131415)
+        delays = [np.random.randint(0, 60) for _ in hours]
+        st.session_state["delay_chart_data"] = {"hours": hours, "delays": delays}
+    
+    delay_data = st.session_state["delay_chart_data"]
+    hours = delay_data["hours"]
+    delays = delay_data["delays"]
     
     fig = px.bar(
         x=hours,
@@ -930,8 +939,17 @@ def display_delay_analysis(airport_code: str):
     # 지연 트렌드
     st.markdown('<h3 class="section-title">📈 지연 트렌드</h3>', unsafe_allow_html=True)
     
-    days = list(range(1, 31))
-    daily_delays = [np.random.randint(10, 50) for _ in days]
+    # 세션 상태에 데이터 캐싱
+    if "delay_trend_data" not in st.session_state:
+        days = list(range(1, 31))
+        # 고정된 시드로 일관된 데이터 생성
+        np.random.seed(161718)
+        daily_delays = [np.random.randint(10, 50) for _ in days]
+        st.session_state["delay_trend_data"] = {"days": days, "daily_delays": daily_delays}
+    
+    trend_data = st.session_state["delay_trend_data"]
+    days = trend_data["days"]
+    daily_delays = trend_data["daily_delays"]
     
     fig = px.line(
         x=days,
@@ -1010,31 +1028,52 @@ def display_advanced_dashboard():
     # 주요 공항 현황
     st.markdown('<h3 class="section-title">🏢 주요 공항 현황</h3>', unsafe_allow_html=True)
     
-    airports = ["ICN", "NRT", "HND", "PEK", "PVG", "SIN", "BKK"]
-    airport_data = []
-    
-    for airport in airports:
-        delay_info = flight_api.get_airport_delays(airport)
-        weather = flight_api.get_weather_info(airport)
+    # 세션 상태에 데이터 캐싱
+    if "advanced_airport_data" not in st.session_state:
+        airports = ["ICN", "NRT", "HND", "PEK", "PVG", "SIN", "BKK"]
+        airport_data = []
         
-        airport_data.append({
-            "공항": airport,
-            "총 항공편": delay_info["total_flights"],
-            "지연 항공편": delay_info["delayed_flights"],
-            "평균 지연": f"{delay_info['average_delay']}분",
-            "온도": f"{weather['temperature']}°C",
-            "날씨": weather["condition"]
-        })
+        # 고정된 시드로 일관된 데이터 생성
+        np.random.seed(789)
+        
+        for airport in airports:
+            delay_info = flight_api.get_airport_delays(airport)
+            weather = flight_api.get_weather_info(airport)
+            
+            airport_data.append({
+                "공항": airport,
+                "총 항공편": delay_info["total_flights"],
+                "지연 항공편": delay_info["delayed_flights"],
+                "평균 지연": f"{delay_info['average_delay']}분",
+                "온도": f"{weather['temperature']}°C",
+                "날씨": weather["condition"]
+            })
+        
+        st.session_state["advanced_airport_data"] = airport_data
     
-    df = pd.DataFrame(airport_data)
+    df = pd.DataFrame(st.session_state["advanced_airport_data"])
     st.dataframe(df, use_container_width=True)
     
     # 항공사별 성과
     st.markdown('<h3 class="section-title">✈️ 항공사별 성과</h3>', unsafe_allow_html=True)
     
-    airlines = ["대한항공", "아시아나항공", "일본항공", "전일본공수", "중국국제항공"]
-    on_time_rates = [np.random.randint(85, 98) for _ in airlines]
-    customer_satisfaction = [np.random.randint(80, 95) for _ in airlines]
+    # 세션 상태에 데이터 캐싱
+    if "advanced_airline_data" not in st.session_state:
+        airlines = ["대한항공", "아시아나항공", "일본항공", "전일본공수", "중국국제항공"]
+        # 고정된 시드로 일관된 데이터 생성
+        np.random.seed(101112)
+        on_time_rates = [np.random.randint(85, 98) for _ in airlines]
+        customer_satisfaction = [np.random.randint(80, 95) for _ in airlines]
+        st.session_state["advanced_airline_data"] = {
+            "airlines": airlines, 
+            "on_time_rates": on_time_rates, 
+            "customer_satisfaction": customer_satisfaction
+        }
+    
+    airline_data = st.session_state["advanced_airline_data"]
+    airlines = airline_data["airlines"]
+    on_time_rates = airline_data["on_time_rates"]
+    customer_satisfaction = airline_data["customer_satisfaction"]
     
     fig = go.Figure()
     fig.add_trace(go.Bar(name="정시율", x=airlines, y=on_time_rates))
