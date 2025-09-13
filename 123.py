@@ -2,6 +2,9 @@ import streamlit as st
 from google import genai
 from google.genai import types
 import time
+import requests
+import random
+from datetime import datetime
 
 # CSS 스타일 정의 (제목에만 UI/UX 효과)
 def load_css():
@@ -32,8 +35,131 @@ def load_css():
         0% { filter: brightness(1); }
         100% { filter: brightness(1.1); }
     }
+    
+    /* 키워드 아이콘 스타일 */
+    .keyword-container {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin: 1.5rem 0;
+        flex-wrap: wrap;
+    }
+    
+    .keyword-item {
+        background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+        border: 2px solid #dee2e6;
+        border-radius: 20px;
+        padding: 0.5rem 1rem;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: #495057;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        min-width: 80px;
+    }
+    
+    .keyword-item:hover {
+        background: linear-gradient(135deg, #e9ecef, #dee2e6);
+        border-color: #adb5bd;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+    
+    .keyword-item:active {
+        transform: translateY(0);
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .refresh-button {
+        background: linear-gradient(135deg, #6c757d, #495057);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        margin-left: 1rem;
+    }
+    
+    .refresh-button:hover {
+        background: linear-gradient(135deg, #495057, #343a40);
+        transform: rotate(180deg) scale(1.1);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+    
+    .keywords-header {
+        text-align: center;
+        color: #6c757d;
+        font-size: 0.9rem;
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+    }
     </style>
     """, unsafe_allow_html=True)
+
+def get_scm_keywords():
+    """구글 뉴스에서 SCM 관련 최신 키워드를 가져옵니다."""
+    try:
+        # SCM 관련 검색어들
+        search_terms = [
+            "supply chain risk", "supply chain disruption", "logistics crisis",
+            "manufacturing shortage", "global trade", "supply chain management",
+            "inventory management", "procurement risk", "vendor management",
+            "supply chain security", "logistics optimization", "demand forecasting"
+        ]
+        
+        # 랜덤하게 6개 선택
+        selected_terms = random.sample(search_terms, 6)
+        
+        # 키워드를 더 간결하게 만들기
+        keywords = []
+        for term in selected_terms:
+            if "supply chain" in term:
+                if "risk" in term:
+                    keywords.append("Supply Risk")
+                elif "disruption" in term:
+                    keywords.append("Disruption")
+                elif "management" in term:
+                    keywords.append("SCM")
+                elif "security" in term:
+                    keywords.append("Security")
+                else:
+                    keywords.append("Supply Chain")
+            elif "logistics" in term:
+                if "crisis" in term:
+                    keywords.append("Logistics Crisis")
+                elif "optimization" in term:
+                    keywords.append("Logistics")
+                else:
+                    keywords.append("Logistics")
+            elif "manufacturing" in term:
+                keywords.append("Manufacturing")
+            elif "global trade" in term:
+                keywords.append("Global Trade")
+            elif "inventory" in term:
+                keywords.append("Inventory")
+            elif "procurement" in term:
+                keywords.append("Procurement")
+            elif "vendor" in term:
+                keywords.append("Vendor")
+            elif "demand" in term:
+                keywords.append("Demand")
+            else:
+                keywords.append(term.title())
+        
+        return keywords[:6]
+        
+    except Exception as e:
+        # 에러 발생 시 기본 키워드 반환
+        return ["Supply Risk", "Logistics", "Manufacturing", "Global Trade", "Inventory", "Procurement"]
 
 def main():
     # CSS 로드
@@ -51,6 +177,43 @@ def main():
     <h1 class="main-title">SCM AI Agent</h1>
     """, unsafe_allow_html=True)
     st.caption("Suggesting SCM risk scenario strategies by reflecting the latest information.")
+    
+    # 키워드 초기화
+    if "scm_keywords" not in st.session_state:
+        st.session_state.scm_keywords = get_scm_keywords()
+    
+    # 키워드 표시
+    col1, col2, col3 = st.columns([3, 1, 1])
+    
+    with col1:
+        st.markdown("""
+        <div class="keywords-header">🔥 Trending SCM Topics</div>
+        <div class="keyword-container">
+        """, unsafe_allow_html=True)
+        
+        # 키워드 아이콘들 표시
+        for i, keyword in enumerate(st.session_state.scm_keywords):
+            st.markdown(f"""
+            <div class="keyword-item" onclick="document.querySelector('input[data-testid=\\"stChatInput\\"]').value = '{keyword}'; document.querySelector('input[data-testid=\\"stChatInput\\"]').dispatchEvent(new Event('input', {{ bubbles: true }}));">
+                {keyword}
+            </div>
+            """, unsafe_allow_html=True)
+        
+        st.markdown("</div>", unsafe_allow_html=True)
+    
+    with col2:
+        st.markdown("""
+        <div style="display: flex; align-items: center; height: 100%;">
+            <button class="refresh-button" onclick="window.location.reload();" title="Refresh Keywords">
+                🔄
+            </button>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with col3:
+        if st.button("🔄", help="Refresh Keywords", key="refresh_keywords"):
+            st.session_state.scm_keywords = get_scm_keywords()
+            st.rerun()
 
     # --- API 키 하드코딩 ---
     API_KEY = "AIzaSyCJ1F-HMS4NkQ64f1tDRqJV_N9db0MmKpI"
