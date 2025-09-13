@@ -71,79 +71,103 @@ QUICK_QUESTIONS = [
     }
 ]
 
-# 연관 추천 주제들
+# 연관 추천 주제들 (한국어)
 RELATED_TOPICS = {
     "geopolitical": [
-        "Taiwan Strait tensions impact",
-        "US-China trade relations",
-        "Regional manufacturing shifts",
-        "Political risk assessment"
+        "대만해협 긴장 영향",
+        "미중 무역 관계",
+        "지역 제조업 이동",
+        "정치적 리스크 평가",
+        "지정학적 불안정성",
+        "국가별 리스크 분석"
     ],
     "global": [
-        "Supply chain resilience",
-        "Diversification strategies",
-        "Risk monitoring systems",
-        "Global trade patterns"
+        "공급망 복원력",
+        "다각화 전략",
+        "리스크 모니터링 시스템",
+        "글로벌 무역 패턴",
+        "글로벌 공급망 네트워크",
+        "국제 협력 방안"
     ],
     "technology": [
-        "Digital transformation risks",
-        "AI implementation challenges",
-        "Blockchain in supply chains",
-        "IoT security concerns"
+        "디지털 전환 리스크",
+        "AI 구현 과제",
+        "블록체인 공급망",
+        "IoT 보안 우려",
+        "자동화 도입 효과",
+        "스마트 팩토리 리스크"
     ],
     "climate": [
-        "Extreme weather events",
-        "Carbon footprint reduction",
-        "Sustainable sourcing",
-        "Green supply chain strategies"
+        "극한 기상 이벤트",
+        "탄소 발자국 감소",
+        "지속가능한 조달",
+        "그린 공급망 전략",
+        "기후 적응 계획",
+        "환경 규제 대응"
     ],
     "economic": [
-        "Inflation impact analysis",
-        "Currency fluctuation risks",
-        "Interest rate effects",
-        "Market volatility strategies"
+        "인플레이션 영향 분석",
+        "환율 변동 리스크",
+        "금리 영향",
+        "시장 변동성 전략",
+        "경제 불확실성 대응",
+        "비용 최적화 방안"
     ],
     "logistics": [
-        "Port congestion solutions",
-        "Freight cost optimization",
-        "Last-mile delivery risks",
-        "Transportation alternatives"
+        "항만 혼잡 해결",
+        "운송비 최적화",
+        "라스트마일 배송 리스크",
+        "운송 대안",
+        "물류 효율성",
+        "배송 네트워크 최적화"
     ],
     "security": [
-        "Data protection measures",
-        "Vendor security assessment",
-        "Incident response plans",
-        "Compliance requirements"
+        "데이터 보호 조치",
+        "벤더 보안 평가",
+        "사고 대응 계획",
+        "규정 준수 요구사항",
+        "사이버 보안 강화",
+        "정보 보안 관리"
     ],
     "materials": [
-        "Critical material sourcing",
-        "Alternative material research",
-        "Stockpiling strategies",
-        "Supplier diversification"
+        "핵심 원자재 조달",
+        "대체 원자재 연구",
+        "재고 확보 전략",
+        "공급업체 다각화",
+        "원자재 가격 변동",
+        "희귀 원자재 관리"
     ],
     "manufacturing": [
-        "Labor market challenges",
-        "Automation opportunities",
-        "Quality control risks",
-        "Capacity planning"
+        "노동시장 과제",
+        "자동화 기회",
+        "품질 관리 리스크",
+        "생산 능력 계획",
+        "제조업 디지털화",
+        "생산 효율성 개선"
     ],
     "trade": [
-        "Tariff optimization",
-        "Free trade agreements",
-        "Customs compliance",
-        "Trade route alternatives"
+        "관세 최적화",
+        "자유무역협정",
+        "관세 준수",
+        "무역 경로 대안",
+        "무역 장벽 대응",
+        "수출입 전략"
     ],
     "healthcare": [
-        "Regulatory compliance",
-        "Cold chain management",
-        "Drug shortage prevention",
-        "Medical device supply"
+        "규제 준수",
+        "콜드체인 관리",
+        "의약품 부족 방지",
+        "의료기기 공급",
+        "의료 서비스 연속성",
+        "의료기기 품질 관리"
     ],
     "energy": [
-        "Renewable energy transition",
-        "Fossil fuel dependency",
-        "Energy cost volatility",
-        "Green energy sourcing"
+        "재생에너지 전환",
+        "화석연료 의존성",
+        "에너지 비용 변동성",
+        "그린 에너지 조달",
+        "에너지 효율성",
+        "에너지 보안"
     ]
 }
 
@@ -187,7 +211,8 @@ def load_css():
     
     /* 타이틀 스타일 */
     .main-title {
-        background: linear-gradient(45deg, #495057, #6c757d);
+        background: linear-gradient(45deg, #495057, #6c757d, #495057, #6c757d);
+        background-size: 300% 300%;
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
@@ -195,12 +220,12 @@ def load_css():
         font-weight: 700;
         text-align: center;
         margin-bottom: 0.5rem;
-        animation: fadeInUp 1s ease-out 0.2s both, subtlePulse 3s ease-in-out infinite;
+        animation: fadeInUp 1s ease-out 0.2s both, gradientMove 4s ease-in-out infinite;
     }
     
-    @keyframes subtlePulse {
-        0%, 100% { opacity: 1; }
-        50% { opacity: 0.8; }
+    @keyframes gradientMove {
+        0%, 100% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
     }
     
     @keyframes fadeInUp {
@@ -275,7 +300,7 @@ def load_css():
         padding: 0.75rem 1.5rem;
         font-size: 1rem;
         transition: all 0.3s ease;
-        background: rgba(255, 255, 255, 0.9);
+        background: #ffffff;
         backdrop-filter: blur(10px);
     }
     
@@ -403,18 +428,31 @@ def load_css():
     
     /* 연관 주제 버튼 스타일 */
     .related-topic-button {
-        background: linear-gradient(135deg, #e9ecef, #dee2e6);
-        color: #495057;
-        border: 1px solid #adb5bd;
-        border-radius: 8px;
-        padding: 0.5rem 1rem;
-        font-size: 0.9rem;
+        background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+        color: #6c757d;
+        border: 1px solid #dee2e6;
+        border-radius: 6px;
+        padding: 0.4rem 0.8rem;
+        font-size: 0.8rem;
         transition: all 0.2s ease;
+        margin: 0.2rem;
     }
     
     .related-topic-button:hover {
-        background: linear-gradient(135deg, #dee2e6, #ced4da);
+        background: linear-gradient(135deg, #e9ecef, #dee2e6);
         transform: translateY(-1px);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* 리프레쉬 버튼 스타일 */
+    .stButton > button[key="refresh_btn"] {
+        font-size: 0.9rem !important;
+        padding: 0.5rem 1rem !important;
+        background: linear-gradient(135deg, #adb5bd, #6c757d) !important;
+    }
+    
+    .stButton > button[key="refresh_btn"]:hover {
+        background: linear-gradient(135deg, #6c757d, #495057) !important;
     }
     
     /* 반응형 디자인 */
@@ -550,7 +588,7 @@ def main():
                 st.session_state.selected_category = question_data["category"]
     
     # 새로고침 버튼
-    if st.button("🔄 Refresh Questions", use_container_width=True):
+    if st.button("🔄 Refresh Questions", use_container_width=True, key="refresh_btn"):
         st.session_state.current_questions = get_random_questions()
         st.rerun()
     
@@ -694,16 +732,16 @@ def main():
         if hasattr(st.session_state, 'selected_category') and st.session_state.selected_category in RELATED_TOPICS:
             st.markdown("""
             <div style="margin-top: 1rem; padding: 1rem; background: rgba(108, 117, 125, 0.1); border-radius: 10px;">
-                <h5 style="color: #6c757d; margin-bottom: 0.5rem;">🔗 Related Topics</h5>
+                <h5 style="color: #6c757d; margin-bottom: 0.5rem;">🔗 관련 추천 주제</h5>
             </div>
             """, unsafe_allow_html=True)
             
-            related_topics = RELATED_TOPICS[st.session_state.selected_category]
-            cols = st.columns(2)
+            related_topics = RELATED_TOPICS[st.session_state.selected_category][:6]  # 6개로 제한
+            cols = st.columns(3)  # 3열로 변경
             for i, topic in enumerate(related_topics):
-                with cols[i % 2]:
+                with cols[i % 3]:
                     if st.button(f"💡 {topic}", key=f"related_{i}", use_container_width=True):
-                        st.session_state.quick_question = f"Tell me more about {topic.lower()} in supply chain management."
+                        st.session_state.quick_question = f"Tell me more about {topic} in supply chain management."
                         st.rerun()
     
     # 메인 컨텐츠 영역 닫기
