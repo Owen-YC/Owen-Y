@@ -6,6 +6,147 @@ import random
 import json
 from datetime import datetime
 
+# 동적 Quick Questions 데이터베이스
+QUICK_QUESTIONS = [
+    # 최신 SCM 리스크 (우선순위 높음)
+    {
+        "button": "🇨🇳 China Supply Chain Risks",
+        "question": "Analyze current China supply chain risks including geopolitical tensions, trade restrictions, and manufacturing disruptions.",
+        "category": "geopolitical"
+    },
+    {
+        "button": "🌍 Global Supply Chain Disruptions",
+        "question": "What are the latest global supply chain disruption risks and mitigation strategies for 2024?",
+        "category": "global"
+    },
+    {
+        "button": "⚡ AI & Technology Risks",
+        "question": "How are AI and emerging technologies affecting supply chain risk management?",
+        "category": "technology"
+    },
+    {
+        "button": "🌡️ Climate Change Impact",
+        "question": "Analyze climate change impacts on global supply chains and adaptation strategies.",
+        "category": "climate"
+    },
+    {
+        "button": "💰 Economic Volatility",
+        "question": "How do current economic uncertainties affect supply chain risk and what hedging strategies are recommended?",
+        "category": "economic"
+    },
+    {
+        "button": "🚢 Shipping & Logistics",
+        "question": "What are the current shipping and logistics risks including port congestion and freight costs?",
+        "category": "logistics"
+    },
+    {
+        "button": "🔒 Cybersecurity Threats",
+        "question": "Analyze cybersecurity risks in supply chain management and protection strategies.",
+        "category": "security"
+    },
+    {
+        "button": "📦 Raw Material Shortages",
+        "question": "What are the current raw material shortage risks and alternative sourcing strategies?",
+        "category": "materials"
+    },
+    {
+        "button": "🏭 Manufacturing Risks",
+        "question": "Analyze manufacturing disruption risks including labor shortages and facility closures.",
+        "category": "manufacturing"
+    },
+    {
+        "button": "🌐 Trade War Effects",
+        "question": "How do current trade tensions and tariffs affect supply chain strategies?",
+        "category": "trade"
+    },
+    {
+        "button": "💊 Healthcare Supply Chains",
+        "question": "What are the specific risks and strategies for healthcare and pharmaceutical supply chains?",
+        "category": "healthcare"
+    },
+    {
+        "button": "🔋 Energy Transition Risks",
+        "question": "How does the energy transition affect supply chain risk management?",
+        "category": "energy"
+    }
+]
+
+# 연관 추천 주제들
+RELATED_TOPICS = {
+    "geopolitical": [
+        "Taiwan Strait tensions impact",
+        "US-China trade relations",
+        "Regional manufacturing shifts",
+        "Political risk assessment"
+    ],
+    "global": [
+        "Supply chain resilience",
+        "Diversification strategies",
+        "Risk monitoring systems",
+        "Global trade patterns"
+    ],
+    "technology": [
+        "Digital transformation risks",
+        "AI implementation challenges",
+        "Blockchain in supply chains",
+        "IoT security concerns"
+    ],
+    "climate": [
+        "Extreme weather events",
+        "Carbon footprint reduction",
+        "Sustainable sourcing",
+        "Green supply chain strategies"
+    ],
+    "economic": [
+        "Inflation impact analysis",
+        "Currency fluctuation risks",
+        "Interest rate effects",
+        "Market volatility strategies"
+    ],
+    "logistics": [
+        "Port congestion solutions",
+        "Freight cost optimization",
+        "Last-mile delivery risks",
+        "Transportation alternatives"
+    ],
+    "security": [
+        "Data protection measures",
+        "Vendor security assessment",
+        "Incident response plans",
+        "Compliance requirements"
+    ],
+    "materials": [
+        "Critical material sourcing",
+        "Alternative material research",
+        "Stockpiling strategies",
+        "Supplier diversification"
+    ],
+    "manufacturing": [
+        "Labor market challenges",
+        "Automation opportunities",
+        "Quality control risks",
+        "Capacity planning"
+    ],
+    "trade": [
+        "Tariff optimization",
+        "Free trade agreements",
+        "Customs compliance",
+        "Trade route alternatives"
+    ],
+    "healthcare": [
+        "Regulatory compliance",
+        "Cold chain management",
+        "Drug shortage prevention",
+        "Medical device supply"
+    ],
+    "energy": [
+        "Renewable energy transition",
+        "Fossil fuel dependency",
+        "Energy cost volatility",
+        "Green energy sourcing"
+    ]
+}
+
 # CSS 스타일 정의
 def load_css():
     st.markdown("""
@@ -260,6 +401,22 @@ def load_css():
         background: linear-gradient(135deg, #5a6268, #343a40);
     }
     
+    /* 연관 주제 버튼 스타일 */
+    .related-topic-button {
+        background: linear-gradient(135deg, #e9ecef, #dee2e6);
+        color: #495057;
+        border: 1px solid #adb5bd;
+        border-radius: 8px;
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+        transition: all 0.2s ease;
+    }
+    
+    .related-topic-button:hover {
+        background: linear-gradient(135deg, #dee2e6, #ced4da);
+        transform: translateY(-1px);
+    }
+    
     /* 반응형 디자인 */
     @media (max-width: 768px) {
         .main-title {
@@ -304,9 +461,7 @@ def main():
 
     # --- 챗봇 대화 내역 초기화 ---
     if "messages" not in st.session_state:
-        st.session_state.messages = [
-            {"role": "assistant", "content": "Hello! Feel free to ask me anything about SCM risk strategies."}
-        ]
+        st.session_state.messages = []
     
     # 사이드바 설정
     with st.sidebar:
@@ -318,9 +473,9 @@ def main():
         
         # 대화 초기화 버튼
         if st.button("🗑️ Clear Conversation", use_container_width=True):
-            st.session_state.messages = [
-                {"role": "assistant", "content": "Hello! Feel free to ask me anything about SCM risk strategies."}
-            ]
+            st.session_state.messages = []
+            if "selected_category" in st.session_state:
+                del st.session_state.selected_category
             st.rerun()
         
         # 대화 내역 다운로드
@@ -339,14 +494,6 @@ def main():
             )
         
         st.markdown("---")
-        
-        # 상태 표시
-        st.markdown("""
-        <div style="text-align: center; margin: 1rem 0;">
-            <span class="status-indicator status-online"></span>
-            <span style="color: #28a745; font-weight: 500;">Online</span>
-        </div>
-        """, unsafe_allow_html=True)
     
     # 메인 컨텐츠 영역
     st.markdown("""
@@ -370,6 +517,23 @@ def main():
             </div>
             """, unsafe_allow_html=True)
 
+    # 동적 Quick Questions 생성
+    def get_random_questions():
+        # 최신 SCM 리스크를 우선순위로 하여 랜덤 선택
+        priority_questions = [q for q in QUICK_QUESTIONS if q["category"] in ["geopolitical", "global", "technology", "climate"]]
+        other_questions = [q for q in QUICK_QUESTIONS if q["category"] not in ["geopolitical", "global", "technology", "climate"]]
+        
+        # 우선순위 질문에서 2개, 나머지에서 1개 선택
+        selected = random.sample(priority_questions, min(2, len(priority_questions)))
+        if len(other_questions) > 0:
+            selected.extend(random.sample(other_questions, min(1, len(other_questions))))
+        
+        return selected[:3]  # 최대 3개
+    
+    # 세션 상태에서 랜덤 질문들을 관리
+    if "current_questions" not in st.session_state:
+        st.session_state.current_questions = get_random_questions()
+    
     # 빠른 질문 버튼들
     st.markdown("""
     <div style="margin-top: 2rem;">
@@ -377,20 +541,18 @@ def main():
     </div>
     """, unsafe_allow_html=True)
     
-    # 빠른 질문 버튼들
-    col1, col2, col3 = st.columns(3)
+    # 동적 질문 버튼들 생성
+    cols = st.columns(3)
+    for i, question_data in enumerate(st.session_state.current_questions):
+        with cols[i]:
+            if st.button(question_data["button"], use_container_width=True):
+                st.session_state.quick_question = question_data["question"]
+                st.session_state.selected_category = question_data["category"]
     
-    with col1:
-        if st.button("🇨🇳 China Risk Analysis", use_container_width=True):
-            st.session_state.quick_question = "Please analyze China's SCM risks. Specifically, tell me about supply chain disruption risks and response strategies."
-    
-    with col2:
-        if st.button("🌍 Global Supply Chain Strategy", use_container_width=True):
-            st.session_state.quick_question = "Please suggest strategies to minimize global supply chain risks. Include diversification and alternative supplier acquisition plans."
-    
-    with col3:
-        if st.button("⚡ Risk Hedging Methods", use_container_width=True):
-            st.session_state.quick_question = "Please tell me about various methods to hedge SCM risks. Include both financial and non-financial methods."
+    # 새로고침 버튼
+    if st.button("🔄 Refresh Questions", use_container_width=True):
+        st.session_state.current_questions = get_random_questions()
+        st.rerun()
     
     # --- 사용자 입력 처리 ---
     prompt = None
@@ -527,6 +689,22 @@ def main():
         
         # 완성된 전체 응답을 대화 내역에 저장합니다.
         st.session_state.messages.append({"role": "assistant", "content": full_response})
+        
+        # 연관 추천 주제 표시
+        if hasattr(st.session_state, 'selected_category') and st.session_state.selected_category in RELATED_TOPICS:
+            st.markdown("""
+            <div style="margin-top: 1rem; padding: 1rem; background: rgba(108, 117, 125, 0.1); border-radius: 10px;">
+                <h5 style="color: #6c757d; margin-bottom: 0.5rem;">🔗 Related Topics</h5>
+            </div>
+            """, unsafe_allow_html=True)
+            
+            related_topics = RELATED_TOPICS[st.session_state.selected_category]
+            cols = st.columns(2)
+            for i, topic in enumerate(related_topics):
+                with cols[i % 2]:
+                    if st.button(f"💡 {topic}", key=f"related_{i}", use_container_width=True):
+                        st.session_state.quick_question = f"Tell me more about {topic.lower()} in supply chain management."
+                        st.rerun()
     
     # 메인 컨텐츠 영역 닫기
     st.markdown("</div>", unsafe_allow_html=True)
