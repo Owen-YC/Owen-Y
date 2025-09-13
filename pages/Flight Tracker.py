@@ -1078,26 +1078,59 @@ def display_advanced_dashboard():
     
     
     # 실시간 항공 교통 현황
-    st.markdown('<h3 class="section-title">🛩️ 실시간 항공 교통 현황</h3>', unsafe_allow_html=True)
+    st.markdown('<h3 class="section-title">🛩️ Real-time Flight Status</h3>', unsafe_allow_html=True)
+    
+    # 새로고침 버튼 추가
+    col1, col2, col3 = st.columns([1, 2, 1])
+    with col2:
+        if st.button("🔄 Refresh Flight Data", key="refresh_flights", help="Click to update flight positions"):
+            # 세션 상태 초기화하여 새 데이터 생성
+            if "flight_map_data" in st.session_state:
+                del st.session_state["flight_map_data"]
+            if "flight_details" in st.session_state:
+                del st.session_state["flight_details"]
+            st.rerun()
     
     # 세션 상태에 맵 데이터 캐싱
     if "flight_map_data" not in st.session_state:
-        # 고정된 시드로 일관된 항공편 위치 및 정보 생성
-        np.random.seed(192021)
+        # 현재 시간을 시드로 사용하여 매번 다른 데이터 생성
+        import time
+        current_time = int(time.time())
+        np.random.seed(current_time % 2**32)
+        
         flight_positions = []
         flight_details = []
         
-        for i in range(20):
-            lat = np.random.uniform(30, 45)
-            lon = np.random.uniform(120, 150)
+        # 더 현실적인 항공편 데이터 생성
+        airlines = ["KE", "OZ", "7C", "BX", "LJ", "TW", "ZE", "NH", "JL", "CA"]
+        routes = [
+            "ICN → NRT", "ICN → LAX", "ICN → FRA", "ICN → SIN",
+            "GMP → CJU", "CJU → ICN", "PUS → ICN", "CJU → GMP",
+            "ICN → BKK", "ICN → HKG", "ICN → TPE", "GMP → PUS",
+            "NRT → ICN", "LAX → ICN", "FRA → ICN", "SIN → ICN"
+        ]
+        statuses = ["On Time", "Delayed", "Boarding", "In Flight", "Approaching", "Departed"]
+        
+        for i in range(25):  # 항공편 수 증가
+            # 한국 주변 좌표로 제한
+            lat = 33.0 + np.random.uniform(-5, 8)  # 한국 주변 위도
+            lon = 125.0 + np.random.uniform(-5, 10)  # 한국 주변 경도
             flight_positions.append({"lat": lat, "lon": lon})
             
             # 항공편 상세 정보 생성
+            airline = np.random.choice(airlines)
+            flight_num = f"{airline}{np.random.randint(100, 9999)}"
+            route = np.random.choice(routes)
+            status = np.random.choice(statuses)
+            altitude = np.random.randint(5000, 45000)
+            speed = np.random.randint(300, 900)
+            
             flight_details.append({
-                "flight_number": f"{chr(65 + i % 26)}{100 + i}",
-                "altitude": f"{np.random.randint(30000, 40000):,} ft",
-                "speed": f"{np.random.randint(800, 950)} km/h",
-                "route": "ICN → NRT"
+                "flight_number": flight_num,
+                "altitude": f"{altitude:,} ft",
+                "speed": f"{speed} km/h",
+                "route": route,
+                "status": status
             })
         
         st.session_state["flight_map_data"] = flight_positions
@@ -1131,22 +1164,36 @@ def display_advanced_dashboard():
     flight_details = st.session_state.get("flight_details", [])
     
     for i, (pos, details) in enumerate(zip(flight_positions, flight_details)):
-        # 항공편 정보 생성
+        # 항공편 정보 생성 (더 상세한 정보)
         flight_info = f"""
-        <div style="font-family: Arial; font-size: 12px; line-height: 1.4;">
-            <b>✈️ Flight {details['flight_number']}</b><br>
-            <b>Status:</b> In Flight<br>
-            <b>Altitude:</b> {details['altitude']}<br>
-            <b>Speed:</b> {details['speed']}<br>
-            <b>Route:</b> {details['route']}
+        <div style="font-family: Arial; font-size: 11px; line-height: 1.3; width: 180px;">
+            <div style="background: #f8f9fa; padding: 8px; border-radius: 5px; border-left: 3px solid #007bff;">
+                <b style="color: #007bff; font-size: 13px;">✈️ {details['flight_number']}</b><br>
+                <span style="color: #28a745; font-weight: bold;">{details['status']}</span><br><br>
+                <b>Route:</b> {details['route']}<br>
+                <b>Altitude:</b> {details['altitude']}<br>
+                <b>Speed:</b> {details['speed']}<br>
+                <small style="color: #6c757d;">Click for details</small>
+            </div>
         </div>
         """
+        
+        # 상태에 따른 색상 결정
+        status_colors = {
+            "On Time": "green",
+            "Delayed": "orange", 
+            "Boarding": "blue",
+            "In Flight": "red",
+            "Approaching": "purple",
+            "Departed": "gray"
+        }
+        color = status_colors.get(details['status'], 'red')
         
         folium.Marker(
             [pos["lat"], pos["lon"]],
             popup=folium.Popup(flight_info, max_width=200),
-            tooltip=f"Flight {details['flight_number']}",
-            icon=folium.Icon(color='red', icon='plane', prefix='fa')
+            tooltip=f"{details['flight_number']} - {details['status']}",
+            icon=folium.Icon(color=color, icon='plane', prefix='fa')
         ).add_to(m)
     
     # 지도 크기를 1496*471에 맞게 조정
