@@ -11,4 +11,6 @@ streamlit-folium
 selenium
 newspaper3k
 google-genai
-deepl
+# FlightAware App Dependencies
+geopy
+timezonefinder
