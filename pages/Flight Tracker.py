@@ -1127,8 +1127,8 @@ def display_advanced_dashboard():
         ).add_to(m)
     
     # 캐싱된 항공편 위치 및 정보 사용
-    flight_positions = st.session_state["flight_map_data"]
-    flight_details = st.session_state["flight_details"]
+    flight_positions = st.session_state.get("flight_map_data", [])
+    flight_details = st.session_state.get("flight_details", [])
     
     for i, (pos, details) in enumerate(zip(flight_positions, flight_details)):
         # 항공편 정보 생성
