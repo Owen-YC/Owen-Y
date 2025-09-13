@@ -21,127 +21,164 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# FlightAware CSS - Modern Aviation Theme
+# FlightAware CSS - Clean White/Gray Theme (Compact)
 st.markdown("""
 <style>
-    /* 전체 배경 - 항공 테마 */
+    /* 전체 배경 - 깔끔한 화이트/그레이 */
     .stApp {
-        background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
-        min-height: 100vh;
+        background: #fafafa;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
     
-    /* 메인 컨테이너 */
-    .main-container {
-        background: rgba(255, 255, 255, 0.05);
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 20px;
-        padding: 2rem;
-        margin: 1rem 0;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    /* 메인 헤더 - 컴팩트 */
+    .main-header {
+        background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+        color: white;
+        padding: 0.8rem 1rem;
+        border-radius: 6px;
+        margin-bottom: 1rem;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        animation: slideInFromTop 0.6s ease-out;
     }
     
-    /* 카드 디자인 */
+    .main-header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+        animation: shimmer 3s infinite;
+    }
+    
+    .main-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin: 0;
+        position: relative;
+        z-index: 1;
+    }
+    
+    .main-subtitle {
+        font-size: 0.75rem;
+        opacity: 0.8;
+        margin: 0.2rem 0 0 0;
+        position: relative;
+        z-index: 1;
+    }
+    
+    /* 컴팩트 카드 디자인 */
     .flight-card {
-        background: rgba(255, 255, 255, 0.08);
-        backdrop-filter: blur(15px);
-        border: 1px solid rgba(255, 255, 255, 0.15);
-        border-radius: 15px;
-        padding: 1.5rem;
-        margin: 1rem 0;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        background: white;
+        border: 1px solid #e1e5e9;
+        border-radius: 6px;
+        padding: 0.8rem;
+        margin: 0.5rem 0;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.08);
         transition: all 0.3s ease;
+        animation: fadeInUp 0.5s ease-out;
     }
     
     .flight-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
-        border-color: rgba(59, 130, 246, 0.5);
+        transform: translateY(-1px);
+        box-shadow: 0 3px 12px rgba(0,0,0,0.12);
+        border-color: #6c757d;
     }
     
-    /* 제목 스타일 */
-    .main-title {
-        background: linear-gradient(45deg, #3b82f6, #8b5cf6, #06b6d4);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        font-size: 3rem;
-        font-weight: 800;
-        text-align: center;
-        margin-bottom: 2rem;
-        text-shadow: 0 0 30px rgba(59, 130, 246, 0.5);
-    }
-    
-    /* 섹션 제목 */
+    /* 섹션 제목 - 컴팩트 */
     .section-title {
-        color: #f1f5f9;
-        font-size: 1.8rem;
-        font-weight: 700;
-        margin: 1.5rem 0 1rem 0;
-        padding-left: 1rem;
-        border-left: 4px solid #3b82f6;
+        color: #2c3e50;
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin: 1rem 0 0.5rem 0;
+        padding-left: 0.5rem;
+        border-left: 3px solid #6c757d;
     }
     
-    /* 메트릭 스타일 */
+    /* 메트릭 컨테이너 - 컴팩트 */
     .metric-container {
-        background: rgba(59, 130, 246, 0.1);
-        border: 1px solid rgba(59, 130, 246, 0.3);
-        border-radius: 12px;
-        padding: 1rem;
+        background: white;
+        border: 1px solid #e1e5e9;
+        border-radius: 6px;
+        padding: 0.6rem;
         text-align: center;
-        margin: 0.5rem;
+        margin: 0.3rem;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+        transition: all 0.3s ease;
     }
     
-    /* 버튼 스타일 */
+    .metric-container:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        border-color: #6c757d;
+    }
+    
+    /* 버튼 스타일 - 컴팩트 */
     .stButton > button {
-        background: linear-gradient(45deg, #3b82f6, #8b5cf6);
+        background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
         color: white;
         border: none;
-        border-radius: 10px;
-        padding: 0.5rem 2rem;
-        font-weight: 600;
+        border-radius: 6px;
+        padding: 0.4rem 1.2rem;
+        font-weight: 500;
+        font-size: 0.85rem;
         transition: all 0.3s ease;
-        box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+        box-shadow: 0 2px 6px rgba(108, 117, 125, 0.3);
     }
     
     .stButton > button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+        transform: translateY(-1px);
+        box-shadow: 0 3px 10px rgba(108, 117, 125, 0.4);
+        background: linear-gradient(135deg, #495057 0%, #343a40 100%);
     }
     
     /* 사이드바 스타일 */
     .css-1d391kg {
-        background: rgba(15, 23, 42, 0.8);
-        backdrop-filter: blur(10px);
+        background: #f8f9fa;
+        border-right: 1px solid #e1e5e9;
     }
     
     /* 입력 필드 스타일 */
     .stTextInput > div > div > input {
-        background: rgba(255, 255, 255, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        border-radius: 8px;
-        color: white;
+        background: white;
+        border: 1px solid #e1e5e9;
+        border-radius: 6px;
+        color: #2c3e50;
+        font-size: 0.85rem;
+        padding: 0.4rem 0.6rem;
+    }
+    
+    .stTextInput > div > div > input:focus {
+        border-color: #6c757d;
+        box-shadow: 0 0 0 2px rgba(108, 117, 125, 0.2);
     }
     
     .stSelectbox > div > div > select {
-        background: rgba(255, 255, 255, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        border-radius: 8px;
-        color: white;
+        background: white;
+        border: 1px solid #e1e5e9;
+        border-radius: 6px;
+        color: #2c3e50;
+        font-size: 0.85rem;
+        padding: 0.4rem 0.6rem;
     }
     
     /* 테이블 스타일 */
     .dataframe {
-        background: rgba(255, 255, 255, 0.05);
-        border-radius: 10px;
+        background: white;
+        border-radius: 6px;
         overflow: hidden;
+        border: 1px solid #e1e5e9;
+        font-size: 0.8rem;
     }
     
     /* 애니메이션 */
-    @keyframes fadeInUp {
+    @keyframes slideInFromTop {
         from {
             opacity: 0;
-            transform: translateY(30px);
+            transform: translateY(-20px);
         }
         to {
             opacity: 1;
@@ -149,24 +186,54 @@ st.markdown("""
         }
     }
     
-    .fade-in {
-        animation: fadeInUp 0.6s ease-out;
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(15px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
     
-    /* 로딩 스피너 */
+    @keyframes shimmer {
+        0% { left: -100%; }
+        100% { left: 100%; }
+    }
+    
+    .fade-in {
+        animation: fadeInUp 0.5s ease-out;
+    }
+    
+    /* 로딩 스피너 - 컴팩트 */
     .loading-spinner {
         display: inline-block;
-        width: 20px;
-        height: 20px;
-        border: 3px solid rgba(59, 130, 246, 0.3);
+        width: 16px;
+        height: 16px;
+        border: 2px solid rgba(108, 117, 125, 0.3);
         border-radius: 50%;
-        border-top-color: #3b82f6;
+        border-top-color: #6c757d;
         animation: spin 1s ease-in-out infinite;
     }
     
     @keyframes spin {
         to { transform: rotate(360deg); }
     }
+    
+    /* 상태 표시기 - 컴팩트 */
+    .status-indicator {
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        margin-right: 6px;
+    }
+    
+    .status-on-time { background-color: #28a745; }
+    .status-delayed { background-color: #ffc107; }
+    .status-cancelled { background-color: #dc3545; }
+    .status-boarding { background-color: #17a2b8; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -293,8 +360,13 @@ flight_api = FlightAwareAPI()
 
 # 메인 애플리케이션
 def main():
-    st.markdown('<h1 class="main-title fade-in">✈️ FlightAware Tracker</h1>', unsafe_allow_html=True)
-    st.markdown('<div class="main-container fade-in">', unsafe_allow_html=True)
+    # 메인 헤더
+    st.markdown("""
+    <div class="main-header fade-in">
+        <h1 class="main-title">✈️ FlightAware Tracker</h1>
+        <p class="main-subtitle">실시간 항공편 추적 및 분석 시스템</p>
+    </div>
+    """, unsafe_allow_html=True)
     
     # 사이드바
     with st.sidebar:
@@ -302,20 +374,21 @@ def main():
         
         search_type = st.selectbox(
             "검색 유형",
-            ["항공편 조회", "공항 출발편", "공항 도착편", "항공편 추적"]
+            ["항공편 조회", "공항 출발편", "공항 도착편", "항공편 추적"],
+            key="search_type"
         )
         
         if search_type == "항공편 조회":
-            flight_number = st.text_input("항공편 번호 (예: KE001)", "KE001")
-            search_button = st.button("🔍 항공편 조회", key="flight_search")
+            flight_number = st.text_input("항공편 번호", "KE001", key="flight_num")
+            search_button = st.button("🔍 조회", key="flight_search")
             
         elif search_type in ["공항 출발편", "공항 도착편"]:
-            airport_code = st.text_input("공항 코드 (예: ICN)", "ICN").upper()
-            search_button = st.button("🔍 공항 정보 조회", key="airport_search")
+            airport_code = st.text_input("공항 코드", "ICN", key="airport_code").upper()
+            search_button = st.button("🔍 조회", key="airport_search")
             
         else:  # 항공편 추적
-            flight_number = st.text_input("추적할 항공편 번호", "KE001")
-            search_button = st.button("📍 항공편 추적", key="track_search")
+            flight_number = st.text_input("항공편 번호", "KE001", key="track_num")
+            search_button = st.button("📍 추적", key="track_search")
     
     # 메인 컨텐츠
     if search_type == "항공편 조회" and st.session_state.get("flight_search", False):
@@ -335,8 +408,6 @@ def main():
                 st.session_state.get("airport_search", False), 
                 st.session_state.get("track_search", False)]):
         display_dashboard()
-    
-    st.markdown('</div>', unsafe_allow_html=True)
 
 def display_flight_info(flight_number: str):
     """항공편 정보 표시"""
@@ -346,20 +417,40 @@ def display_flight_info(flight_number: str):
         time.sleep(1)  # API 호출 시뮬레이션
         flight_info = flight_api.get_flight_info(flight_number)
     
-    # 항공편 기본 정보
+    # 항공편 기본 정보 - 컴팩트
     col1, col2, col3, col4 = st.columns(4)
     
     with col1:
-        st.metric("항공편", flight_info["flight_number"])
+        st.markdown(f"""
+        <div class="metric-container">
+            <h4>✈️ 항공편</h4>
+            <h3>{flight_info["flight_number"]}</h3>
+        </div>
+        """, unsafe_allow_html=True)
     with col2:
-        st.metric("항공사", flight_info["airline"])
+        st.markdown(f"""
+        <div class="metric-container">
+            <h4>🏢 항공사</h4>
+            <h3>{flight_info["airline"]}</h3>
+        </div>
+        """, unsafe_allow_html=True)
     with col3:
-        st.metric("항공기", flight_info["aircraft"])
+        st.markdown(f"""
+        <div class="metric-container">
+            <h4>🛩️ 항공기</h4>
+            <h3>{flight_info["aircraft"]}</h3>
+        </div>
+        """, unsafe_allow_html=True)
     with col4:
         status_color = "🟢" if flight_info["status"] == "On Time" else "🟡"
-        st.metric("상태", f"{status_color} {flight_info['status']}")
+        st.markdown(f"""
+        <div class="metric-container">
+            <h4>📊 상태</h4>
+            <h3>{status_color} {flight_info['status']}</h3>
+        </div>
+        """, unsafe_allow_html=True)
     
-    # 출발/도착 정보
+    # 출발/도착 정보 - 컴팩트
     st.markdown('<h3 class="section-title">🛫 출발 정보</h3>', unsafe_allow_html=True)
     dep_col1, dep_col2, dep_col3 = st.columns(3)
     
@@ -420,16 +511,31 @@ def display_flight_info(flight_number: str):
         </div>
         """, unsafe_allow_html=True)
     
-    # 항공편 상세 정보
+    # 항공편 상세 정보 - 컴팩트
     st.markdown('<h3 class="section-title">📊 항공편 상세</h3>', unsafe_allow_html=True)
     detail_col1, detail_col2, detail_col3 = st.columns(3)
     
     with detail_col1:
-        st.metric("비행 시간", flight_info["duration"])
+        st.markdown(f"""
+        <div class="metric-container">
+            <h4>⏱️ 비행 시간</h4>
+            <h3>{flight_info["duration"]}</h3>
+        </div>
+        """, unsafe_allow_html=True)
     with detail_col2:
-        st.metric("거리", flight_info["distance"])
+        st.markdown(f"""
+        <div class="metric-container">
+            <h4>📏 거리</h4>
+            <h3>{flight_info["distance"]}</h3>
+        </div>
+        """, unsafe_allow_html=True)
     with detail_col3:
-        st.metric("현재 상태", flight_info["status"])
+        st.markdown(f"""
+        <div class="metric-container">
+            <h4>📊 현재 상태</h4>
+            <h3>{flight_info["status"]}</h3>
+        </div>
+        """, unsafe_allow_html=True)
 
 def display_airport_departures(airport_code: str):
     """공항 출발편 표시"""
@@ -439,7 +545,7 @@ def display_airport_departures(airport_code: str):
         time.sleep(1)
         departures = flight_api.get_airport_departures(airport_code)
     
-    # 출발편 통계
+    # 출발편 통계 - 컴팩트
     col1, col2, col3, col4 = st.columns(4)
     
     on_time = len([f for f in departures if f["status"] == "On Time"])
@@ -448,13 +554,33 @@ def display_airport_departures(airport_code: str):
     departed = len([f for f in departures if f["status"] == "Departed"])
     
     with col1:
-        st.metric("정시", on_time, "편")
+        st.markdown(f"""
+        <div class="metric-container">
+            <h4>🟢 정시</h4>
+            <h3>{on_time}편</h3>
+        </div>
+        """, unsafe_allow_html=True)
     with col2:
-        st.metric("지연", delayed, "편")
+        st.markdown(f"""
+        <div class="metric-container">
+            <h4>🟡 지연</h4>
+            <h3>{delayed}편</h3>
+        </div>
+        """, unsafe_allow_html=True)
     with col3:
-        st.metric("탑승중", boarding, "편")
+        st.markdown(f"""
+        <div class="metric-container">
+            <h4>🔵 탑승중</h4>
+            <h3>{boarding}편</h3>
+        </div>
+        """, unsafe_allow_html=True)
     with col4:
-        st.metric("출발", departed, "편")
+        st.markdown(f"""
+        <div class="metric-container">
+            <h4>✈️ 출발</h4>
+            <h3>{departed}편</h3>
+        </div>
+        """, unsafe_allow_html=True)
     
     # 출발편 테이블
     df = pd.DataFrame(departures)
@@ -468,7 +594,7 @@ def display_airport_arrivals(airport_code: str):
         time.sleep(1)
         arrivals = flight_api.get_airport_arrivals(airport_code)
     
-    # 도착편 통계
+    # 도착편 통계 - 컴팩트
     col1, col2, col3, col4 = st.columns(4)
     
     on_time = len([f for f in arrivals if f["status"] == "On Time"])
@@ -477,13 +603,33 @@ def display_airport_arrivals(airport_code: str):
     approaching = len([f for f in arrivals if f["status"] == "Approaching"])
     
     with col1:
-        st.metric("정시", on_time, "편")
+        st.markdown(f"""
+        <div class="metric-container">
+            <h4>🟢 정시</h4>
+            <h3>{on_time}편</h3>
+        </div>
+        """, unsafe_allow_html=True)
     with col2:
-        st.metric("지연", delayed, "편")
+        st.markdown(f"""
+        <div class="metric-container">
+            <h4>🟡 지연</h4>
+            <h3>{delayed}편</h3>
+        </div>
+        """, unsafe_allow_html=True)
     with col3:
-        st.metric("착륙", landed, "편")
+        st.markdown(f"""
+        <div class="metric-container">
+            <h4>🛬 착륙</h4>
+            <h3>{landed}편</h3>
+        </div>
+        """, unsafe_allow_html=True)
     with col4:
-        st.metric("접근중", approaching, "편")
+        st.markdown(f"""
+        <div class="metric-container">
+            <h4>🔄 접근중</h4>
+            <h3>{approaching}편</h3>
+        </div>
+        """, unsafe_allow_html=True)
     
     # 도착편 테이블
     df = pd.DataFrame(arrivals)
@@ -542,17 +688,32 @@ def display_flight_tracking(flight_number: str):
         icon=folium.Icon(color='blue', icon='plane', prefix='fa')
     ).add_to(m)
     
-    st_folium(m, width=700, height=500)
+    st_folium(m, width=700, height=400)
     
-    # 추적 정보
+    # 추적 정보 - 컴팩트
     col1, col2, col3 = st.columns(3)
     
     with col1:
-        st.metric("현재 고도", "35,000 ft")
+        st.markdown(f"""
+        <div class="metric-container">
+            <h4>📏 현재 고도</h4>
+            <h3>35,000 ft</h3>
+        </div>
+        """, unsafe_allow_html=True)
     with col2:
-        st.metric("현재 속도", "850 km/h")
+        st.markdown(f"""
+        <div class="metric-container">
+            <h4>⚡ 현재 속도</h4>
+            <h3>850 km/h</h3>
+        </div>
+        """, unsafe_allow_html=True)
     with col3:
-        st.metric("남은 거리", "650 km")
+        st.markdown(f"""
+        <div class="metric-container">
+            <h4>📐 남은 거리</h4>
+            <h3>650 km</h3>
+        </div>
+        """, unsafe_allow_html=True)
 
 def display_dashboard():
     """기본 대시보드 표시"""
@@ -590,12 +751,13 @@ def display_dashboard():
         y=flights_count,
         title="항공사별 일일 운항편 수",
         color=flights_count,
-        color_continuous_scale="viridis"
+        color_continuous_scale="blues"
     )
     fig.update_layout(
-        plot_bgcolor='rgba(0,0,0,0)',
-        paper_bgcolor='rgba(0,0,0,0)',
-        font_color='white'
+        plot_bgcolor='white',
+        paper_bgcolor='white',
+        font_color='#2c3e50',
+        height=400
     )
     st.plotly_chart(fig, use_container_width=True)
     
@@ -609,14 +771,16 @@ def display_dashboard():
         x=hours,
         y=flight_counts,
         title="시간대별 운항편 수",
-        markers=True
+        markers=True,
+        color_discrete_sequence=['#6c757d']
     )
     fig.update_layout(
-        plot_bgcolor='rgba(0,0,0,0)',
-        paper_bgcolor='rgba(0,0,0,0)',
-        font_color='white',
+        plot_bgcolor='white',
+        paper_bgcolor='white',
+        font_color='#2c3e50',
         xaxis_title="시간",
-        yaxis_title="운항편 수"
+        yaxis_title="운항편 수",
+        height=400
     )
     st.plotly_chart(fig, use_container_width=True)
 
