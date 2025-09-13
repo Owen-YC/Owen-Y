@@ -505,7 +505,6 @@ def main():
     # 메인 검색 영역
     st.markdown("""
     <div class="main-search-container fade-in">
-        <h2 class="search-title">Advanced Flight Search</h2>
         <p class="search-subtitle">FlightAware is at the heart of aviation as a leader in providing accurate and actionable advanced data and insights for all aviation decisions.</p>
     </div>
     """, unsafe_allow_html=True)
