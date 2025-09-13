@@ -512,13 +512,13 @@ def main():
     if flight_search_btn and flight_search:
         st.session_state["flight_search_adv"] = True
         st.session_state["flight_number_adv"] = flight_search
-        st.rerun()
+        # st.rerun() 제거 - 자동으로 리렌더링됨
     
     if route_search_btn and departure_search and destination_search:
         st.session_state["route_search_adv"] = True
         st.session_state["departure_adv"] = departure_search
         st.session_state["destination_adv"] = destination_search
-        st.rerun()
+        # st.rerun() 제거 - 자동으로 리렌더링됨
     
     # 사이드바 (간소화)
     with st.sidebar:
