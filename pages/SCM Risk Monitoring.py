@@ -2191,11 +2191,11 @@ def main():
 
         with col_time:
             st.markdown(f"""
-            <div class="unified-info-card" style="padding: 0.4rem; margin-bottom: 0.5rem;">
-                <div class="info-title" style="font-size: 0.8rem; margin-bottom: 0.3rem; animation: fadeInUp 0.8s ease-out;">🇰🇷 Seoul Time</div>
-                <div class="info-content" style="font-size: 0.9rem;">
-                    <div style="font-size: 0.75rem; color: #7f8c8d; margin-bottom: 0.2rem; text-align: center;">{date_str}</div>
-                    <div style="font-size: 1.1rem; font-weight: bold; color: #2c3e50; text-align: center;">{time_str}</div>
+            <div class="unified-info-card" style="padding: 0.4rem; margin-bottom: 0.5rem; width: 314px; height: 164px; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                <div class="info-title" style="font-size: 0.7rem; margin-bottom: 0.2rem; animation: fadeInUp 0.8s ease-out;">🇰🇷 Seoul Time</div>
+                <div class="info-content" style="font-size: 0.8rem; text-align: center; flex: 1; display: flex; flex-direction: column; justify-content: center;">
+                    <div style="font-size: 0.65rem; color: #7f8c8d; margin-bottom: 0.15rem;">{date_str}</div>
+                    <div style="font-size: 1.0rem; font-weight: bold; color: #2c3e50;">{time_str}</div>
                 </div>
             </div>
             """, unsafe_allow_html=True)
