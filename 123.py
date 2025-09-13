@@ -25,13 +25,12 @@ def load_css():
         margin-bottom: 2rem;
         box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
         border: 1px solid rgba(108, 117, 125, 0.2);
-        animation: slideInDown 0.8s ease-out;
-        transition: all 0.3s ease;
+        animation: slideInDown 0.8s ease-out, gentleFloat 4s ease-in-out infinite;
     }
     
-    .header-container:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+    @keyframes gentleFloat {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-3px); }
     }
     
     @keyframes slideInDown {
@@ -55,13 +54,12 @@ def load_css():
         font-weight: 700;
         text-align: center;
         margin-bottom: 0.5rem;
-        animation: fadeInUp 1s ease-out 0.2s both;
-        transition: all 0.3s ease;
+        animation: fadeInUp 1s ease-out 0.2s both, subtlePulse 3s ease-in-out infinite;
     }
     
-    .main-title:hover {
-        background: linear-gradient(45deg, #343a40, #495057);
-        transform: scale(1.02);
+    @keyframes subtlePulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.8; }
     }
     
     @keyframes fadeInUp {
@@ -114,18 +112,7 @@ def load_css():
         border-radius: 18px 18px 4px 18px;
         margin: 0.5rem 0;
         box-shadow: 0 4px 15px rgba(108, 117, 125, 0.3);
-        animation: slideInRight 0.5s ease-out;
-    }
-    
-    @keyframes slideInRight {
-        from {
-            opacity: 0;
-            transform: translateX(20px);
-        }
-        to {
-            opacity: 1;
-            transform: translateX(0);
-        }
+        animation: fadeInUp 0.6s ease-out;
     }
     
     /* 어시스턴트 메시지 스타일 */
@@ -136,19 +123,8 @@ def load_css():
         border-radius: 18px 18px 18px 4px;
         margin: 0.5rem 0;
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        animation: slideInLeft 0.5s ease-out;
+        animation: fadeInUp 0.6s ease-out;
         border-left: 4px solid #6c757d;
-    }
-    
-    @keyframes slideInLeft {
-        from {
-            opacity: 0;
-            transform: translateX(-20px);
-        }
-        to {
-            opacity: 1;
-            transform: translateX(0);
-        }
     }
     
     /* 입력창 스타일 */
@@ -196,14 +172,9 @@ def load_css():
         51%, 100% { border-color: transparent; }
     }
     
-    /* 호버 효과 */
-    .hover-effect {
+    /* 부드러운 전환 효과 */
+    .smooth-transition {
         transition: all 0.3s ease;
-    }
-    
-    .hover-effect:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
     }
     
     /* 상태 표시 */
@@ -257,14 +228,13 @@ def load_css():
         border-radius: 15px;
         padding: 0.75rem 1rem;
         font-weight: 500;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 15px rgba(108, 117, 125, 0.3);
+        transition: all 0.2s ease;
+        box-shadow: 0 2px 8px rgba(108, 117, 125, 0.2);
     }
     
     .stButton > button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(108, 117, 125, 0.4);
         background: linear-gradient(135deg, #5a6268, #343a40);
+        box-shadow: 0 4px 12px rgba(108, 117, 125, 0.3);
     }
     
     /* 사이드바 버튼 스타일 */
@@ -272,6 +242,7 @@ def load_css():
         background: linear-gradient(135deg, #6c757d, #495057);
         border-radius: 10px;
         margin-bottom: 0.5rem;
+        transition: all 0.2s ease;
     }
     
     .stSidebar .stButton > button:hover {
@@ -282,6 +253,7 @@ def load_css():
     .stDownloadButton > button {
         background: linear-gradient(135deg, #6c757d, #495057);
         border-radius: 10px;
+        transition: all 0.2s ease;
     }
     
     .stDownloadButton > button:hover {
@@ -323,7 +295,7 @@ def main():
     st.markdown("""
     <div class="header-container">
         <h1 class="main-title">SCM AI Agent</h1>
-        <p class="subtitle">Google 검색을 통해 최신 정보를 반영하여 SCM 리스크 시나리오 전략을 제안합니다.</p>
+        <p class="subtitle">AI Agent suggests SCM risk scenario strategies.</p>
     </div>
     """, unsafe_allow_html=True)
 
@@ -333,21 +305,21 @@ def main():
     # --- 챗봇 대화 내역 초기화 ---
     if "messages" not in st.session_state:
         st.session_state.messages = [
-            {"role": "assistant", "content": "안녕하세요! SCM 리스크 전략에 대해 무엇이든 물어보세요."}
+            {"role": "assistant", "content": "Hello! Feel free to ask me anything about SCM risk strategies."}
         ]
     
     # 사이드바 설정
     with st.sidebar:
         st.markdown("""
         <div style="text-align: center; padding: 1rem;">
-            <h3 style="color: #667eea; margin-bottom: 1rem;">⚙️ 설정</h3>
+            <h3 style="color: #6c757d; margin-bottom: 1rem;">⚙️ Settings</h3>
         </div>
         """, unsafe_allow_html=True)
         
         # 대화 초기화 버튼
-        if st.button("🗑️ 대화 초기화", use_container_width=True):
+        if st.button("🗑️ Clear Conversation", use_container_width=True):
             st.session_state.messages = [
-                {"role": "assistant", "content": "안녕하세요! SCM 리스크 전략에 대해 무엇이든 물어보세요."}
+                {"role": "assistant", "content": "Hello! Feel free to ask me anything about SCM risk strategies."}
             ]
             st.rerun()
         
@@ -355,11 +327,11 @@ def main():
         if st.session_state.messages:
             conversation_text = ""
             for msg in st.session_state.messages:
-                role = "사용자" if msg["role"] == "user" else "AI 어시스턴트"
+                role = "User" if msg["role"] == "user" else "AI Assistant"
                 conversation_text += f"{role}: {msg['content']}\n\n"
             
             st.download_button(
-                label="💾 대화 내역 다운로드",
+                label="💾 Download Conversation",
                 data=conversation_text,
                 file_name=f"scm_conversation_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt",
                 mime="text/plain",
@@ -372,7 +344,7 @@ def main():
         st.markdown("""
         <div style="text-align: center; margin: 1rem 0;">
             <span class="status-indicator status-online"></span>
-            <span style="color: #28a745; font-weight: 500;">온라인</span>
+            <span style="color: #28a745; font-weight: 500;">Online</span>
         </div>
         """, unsafe_allow_html=True)
     
@@ -385,15 +357,15 @@ def main():
     for i, message in enumerate(st.session_state.messages):
         if message["role"] == "user":
             st.markdown(f"""
-            <div class="user-message hover-effect">
-                <strong>👤 사용자</strong><br>
+            <div class="user-message smooth-transition">
+                <strong>👤 User</strong><br>
                 {message["content"]}
             </div>
             """, unsafe_allow_html=True)
         else:
             st.markdown(f"""
-            <div class="assistant-message hover-effect">
-                <strong>🤖 AI 어시스턴트</strong><br>
+            <div class="assistant-message smooth-transition">
+                <strong>🤖 AI Assistant</strong><br>
                 {message["content"]}
             </div>
             """, unsafe_allow_html=True)
@@ -401,7 +373,7 @@ def main():
     # 빠른 질문 버튼들
     st.markdown("""
     <div style="margin-top: 2rem;">
-        <h4 style="color: #667eea; margin-bottom: 1rem;">💬 질문하기</h4>
+        <h4 style="color: #6c757d; margin-bottom: 1rem;">💬 Quick Questions</h4>
     </div>
     """, unsafe_allow_html=True)
     
@@ -409,16 +381,16 @@ def main():
     col1, col2, col3 = st.columns(3)
     
     with col1:
-        if st.button("🇨🇳 중국 리스크 분석", use_container_width=True):
-            st.session_state.quick_question = "중국의 SCM 리스크를 분석해주세요. 특히 공급망 중단 위험과 대응 전략을 알려주세요."
+        if st.button("🇨🇳 China Risk Analysis", use_container_width=True):
+            st.session_state.quick_question = "Please analyze China's SCM risks. Specifically, tell me about supply chain disruption risks and response strategies."
     
     with col2:
-        if st.button("🌍 글로벌 공급망 전략", use_container_width=True):
-            st.session_state.quick_question = "글로벌 공급망 리스크를 최소화하는 전략을 제안해주세요. 다각화와 대체 공급처 확보 방안을 포함해주세요."
+        if st.button("🌍 Global Supply Chain Strategy", use_container_width=True):
+            st.session_state.quick_question = "Please suggest strategies to minimize global supply chain risks. Include diversification and alternative supplier acquisition plans."
     
     with col3:
-        if st.button("⚡ 리스크 헷지 방법", use_container_width=True):
-            st.session_state.quick_question = "SCM 리스크를 헷지하는 다양한 방법들을 알려주세요. 금융상품과 비금융적 방법 모두 포함해주세요."
+        if st.button("⚡ Risk Hedging Methods", use_container_width=True):
+            st.session_state.quick_question = "Please tell me about various methods to hedge SCM risks. Include both financial and non-financial methods."
     
     # --- 사용자 입력 처리 ---
     prompt = None
@@ -430,7 +402,7 @@ def main():
     
     # 일반 입력 처리
     if not prompt:
-        prompt = st.chat_input("국가, 리스크, 전략 등 궁금한 점을 질문하세요.", key="main_input")
+        prompt = st.chat_input("Ask about countries, risks, strategies, etc.", key="main_input")
     
     if prompt:
         # 사용자의 메시지를 대화 내역에 추가하고 화면에 표시
@@ -438,8 +410,8 @@ def main():
         
         # 사용자 메시지 표시
         st.markdown(f"""
-        <div class="user-message hover-effect">
-            <strong>👤 사용자</strong><br>
+        <div class="user-message smooth-transition">
+            <strong>👤 User</strong><br>
             {prompt}
         </div>
         """, unsafe_allow_html=True)
@@ -448,7 +420,7 @@ def main():
         st.markdown("""
         <div style="text-align: center; margin: 1rem 0;">
             <span class="status-indicator status-thinking"></span>
-            <span style="color: #ffc107; font-weight: 500;">생각 중...</span>
+            <span style="color: #ffc107; font-weight: 500;">Thinking...</span>
         </div>
         """, unsafe_allow_html=True)
 
@@ -460,8 +432,8 @@ def main():
         # API 호출 전, 사용자에게 즉각적인 피드백을 줍니다.
         message_placeholder.markdown("""
         <div class="assistant-message">
-            <strong>🤖 AI 어시스턴트</strong><br>
-            <span class="loading-dots">최신 정보를 검색하고 분석 중입니다</span>
+            <strong>🤖 AI Assistant</strong><br>
+            <span class="loading-dots">Searching and analyzing latest information</span>
         </div>
         """, unsafe_allow_html=True)
 
@@ -512,7 +484,7 @@ def main():
                     # 현재까지의 답변을 타이핑 애니메이션과 함께 표시
                     message_placeholder.markdown(f"""
                     <div class="assistant-message">
-                        <strong>🤖 AI 어시스턴트</strong><br>
+                        <strong>🤖 AI Assistant</strong><br>
                         <span class="typing-animation">{full_response}</span>
                     </div>
                     """, unsafe_allow_html=True)
@@ -521,8 +493,8 @@ def main():
             
             # 답변 생성이 완료되면 타이핑 애니메이션 없이 최종 결과만 표시합니다.
             message_placeholder.markdown(f"""
-            <div class="assistant-message hover-effect">
-                <strong>🤖 AI 어시스턴트</strong><br>
+            <div class="assistant-message smooth-transition">
+                <strong>🤖 AI Assistant</strong><br>
                 {full_response}
             </div>
             """, unsafe_allow_html=True)
@@ -531,16 +503,16 @@ def main():
             st.markdown("""
             <div style="text-align: center; margin: 1rem 0;">
                 <span class="status-indicator status-online"></span>
-                <span style="color: #28a745; font-weight: 500;">온라인</span>
+                <span style="color: #28a745; font-weight: 500;">Online</span>
             </div>
             """, unsafe_allow_html=True)
 
         except Exception as e:
             # 에러 발생 시, placeholder에 에러 메시지를 표시합니다.
-            full_response = "죄송합니다, 답변을 생성하는 동안 오류가 발생했습니다. 잠시 후 다시 시도해주세요."
+            full_response = "Sorry, an error occurred while generating the response. Please try again later."
             message_placeholder.markdown(f"""
             <div class="assistant-message" style="border-left-color: #dc3545; background: linear-gradient(135deg, #f8d7da, #f5c6cb);">
-                <strong>🤖 AI 어시스턴트</strong><br>
+                <strong>🤖 AI Assistant</strong><br>
                 {full_response}
             </div>
             """, unsafe_allow_html=True)
@@ -549,7 +521,7 @@ def main():
             st.markdown("""
             <div style="text-align: center; margin: 1rem 0;">
                 <span class="status-indicator status-online"></span>
-                <span style="color: #28a745; font-weight: 500;">온라인</span>
+                <span style="color: #28a745; font-weight: 500;">Online</span>
             </div>
             """, unsafe_allow_html=True)
         
@@ -562,8 +534,8 @@ def main():
     # 하단 정보
     st.markdown("""
     <div style="text-align: center; margin-top: 2rem; padding: 1rem; color: #6c757d;">
-        <p>💡 <strong>팁:</strong> 구체적인 국가명이나 리스크 유형을 포함하여 질문하면 더 정확한 분석을 받을 수 있습니다.</p>
-        <p style="font-size: 0.9rem; margin-top: 0.5rem;">Powered by Google Gemini AI • 최신 정보 검색 지원</p>
+        <p>💡 <strong>Tip:</strong> Include specific country names or risk types in your questions for more accurate analysis.</p>
+        <p style="font-size: 0.9rem; margin-top: 0.5rem;">Powered by Google Gemini AI • Latest Information Search Support</p>
     </div>
     """, unsafe_allow_html=True)
 
