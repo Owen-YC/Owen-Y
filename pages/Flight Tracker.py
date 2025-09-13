@@ -418,24 +418,46 @@ class AdvancedFlightAwareAPI:
     
     def get_weather_info(self, airport_code: str) -> Dict:
         """공항 날씨 정보 조회"""
+        # 세션 상태에 데이터 캐싱
+        cache_key = f"weather_{airport_code}"
+        if cache_key in st.session_state:
+            return st.session_state[cache_key]
+        
+        # 고정된 시드로 일관된 데이터 생성
+        np.random.seed(hash(airport_code + "weather") % 2**32)
+        
         # 날씨 시뮬레이션
         conditions = ["맑음", "흐림", "비", "눈", "안개"]
-        return {
+        result = {
             "temperature": np.random.randint(-5, 35),
             "condition": np.random.choice(conditions),
             "humidity": np.random.randint(30, 90),
             "wind_speed": np.random.randint(5, 25),
             "visibility": np.random.randint(5, 15)
         }
+        
+        st.session_state[cache_key] = result
+        return result
     
     def get_airport_delays(self, airport_code: str) -> Dict:
         """공항 지연 정보"""
-        return {
+        # 세션 상태에 데이터 캐싱
+        cache_key = f"delays_{airport_code}"
+        if cache_key in st.session_state:
+            return st.session_state[cache_key]
+        
+        # 고정된 시드로 일관된 데이터 생성
+        np.random.seed(hash(airport_code + "delays") % 2**32)
+        
+        result = {
             "average_delay": np.random.randint(10, 45),
             "delayed_flights": np.random.randint(5, 25),
             "cancelled_flights": np.random.randint(0, 5),
             "total_flights": np.random.randint(100, 300)
         }
+        
+        st.session_state[cache_key] = result
+        return result
     
     def get_flight_route(self, flight_number: str) -> List[Dict]:
         """항공편 경로 정보"""
