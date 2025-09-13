@@ -1153,7 +1153,7 @@ def display_advanced_dashboard():
             [airport["lat"], airport["lon"]],
             popup=folium.Popup(airport_info, max_width=130, max_height=80),
             tooltip=f"{airport['name']} - {airport['city']}",
-            icon=folium.Icon(color='blue', icon='plane', prefix='fa', icon_size=(10, 10))
+            icon=folium.Icon(color='blue', icon='plane', prefix='fa')
         ).add_to(m)
     
     # 캐싱된 항공편 위치 및 정보 사용
@@ -1190,7 +1190,7 @@ def display_advanced_dashboard():
             [pos["lat"], pos["lon"]],
             popup=folium.Popup(flight_info, max_width=150, max_height=120),
             tooltip=f"{details['flight_number']} - {details['status']}",
-            icon=folium.Icon(color=color, icon='plane', prefix='fa', icon_size=(12, 12))
+            icon=folium.Icon(color=color, icon='plane', prefix='fa')
         ).add_to(m)
     
     # 지도 크기를 1496*471에 맞게 조정
