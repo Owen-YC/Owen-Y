@@ -222,6 +222,17 @@ st.markdown("""
         overflow: hidden;
         border: 1px solid #e1e5e9;
         font-size: 0.75rem;
+        text-align: center;
+    }
+    
+    .dataframe th {
+        text-align: center !important;
+        background-color: #f8f9fa;
+        font-weight: 600;
+    }
+    
+    .dataframe td {
+        text-align: center !important;
     }
     
     /* 메인 검색 영역 */
@@ -497,7 +508,7 @@ def main():
     # 메인 헤더
     st.markdown("""
     <div class="main-header fade-in">
-        <h1 class="main-title">Flight Tracker</h1>
+        <h1 class="main-title">Flight Tracker Advanced</h1>
         <p class="main-subtitle">Advanced Flight Tracking & Analysis System</p>
     </div>
     """, unsafe_allow_html=True)
@@ -1017,21 +1028,11 @@ def display_advanced_dashboard():
         st.session_state["advanced_airport_data"] = airport_data
     
     df = pd.DataFrame(st.session_state["advanced_airport_data"])
-    st.dataframe(df, use_container_width=True)
+    st.dataframe(df, use_container_width=True, hide_index=True)
     
     
-    # 실시간 항공 교통 현황 (제목과 새로고침 버튼을 같은 줄에)
-    col1, col2 = st.columns([4, 1])
-    with col1:
-        st.markdown('<h3 class="section-title">🛩️ Real-time Flight Status</h3>', unsafe_allow_html=True)
-    with col2:
-        if st.button("Refresh", key="refresh_flights", help="Refresh flight data", use_container_width=True):
-            # 세션 상태 초기화하여 새 데이터 생성
-            if "flight_map_data" in st.session_state:
-                del st.session_state["flight_map_data"]
-            if "flight_details" in st.session_state:
-                del st.session_state["flight_details"]
-            st.rerun()
+    # 실시간 항공 교통 현황
+    st.markdown('<h3 class="section-title">🛩️ Real-time Flight Status</h3>', unsafe_allow_html=True)
     
     # 세션 상태에 맵 데이터 캐싱
     if "flight_map_data" not in st.session_state:
@@ -1247,6 +1248,17 @@ def display_advanced_dashboard():
     
     # 지도 크기를 1496*471에 맞게 조정
     st_folium(m, width=1496, height=471)
+    
+    # Refresh 버튼을 맵 아래에 배치
+    col1, col2, col3 = st.columns([1, 1, 1])
+    with col2:
+        if st.button("Refresh", key="refresh_flights", help="Refresh flight data", use_container_width=True):
+            # 세션 상태 초기화하여 새 데이터 생성
+            if "flight_map_data" in st.session_state:
+                del st.session_state["flight_map_data"]
+            if "flight_details" in st.session_state:
+                del st.session_state["flight_details"]
+            st.rerun()
 
 if __name__ == "__main__":
     main()
