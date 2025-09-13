@@ -1076,42 +1076,21 @@ def display_advanced_dashboard():
     df = pd.DataFrame(st.session_state["advanced_airport_data"])
     st.dataframe(df, use_container_width=True)
     
-    # 항공사별 성과
-    st.markdown('<h3 class="section-title">✈️ 항공사별 성과</h3>', unsafe_allow_html=True)
-    
-    # 세션 상태에 데이터 캐싱
-    if "advanced_airline_data" not in st.session_state:
-        airlines = ["대한항공", "아시아나항공", "일본항공", "전일본공수", "중국국제항공"]
-        # 고정된 시드로 일관된 데이터 생성
-        np.random.seed(101112)
-        on_time_rates = [np.random.randint(85, 98) for _ in airlines]
-        customer_satisfaction = [np.random.randint(80, 95) for _ in airlines]
-        st.session_state["advanced_airline_data"] = {
-            "airlines": airlines, 
-            "on_time_rates": on_time_rates, 
-            "customer_satisfaction": customer_satisfaction
-        }
-    
-    airline_data = st.session_state["advanced_airline_data"]
-    airlines = airline_data["airlines"]
-    on_time_rates = airline_data["on_time_rates"]
-    customer_satisfaction = airline_data["customer_satisfaction"]
-    
-    fig = go.Figure()
-    fig.add_trace(go.Bar(name="정시율", x=airlines, y=on_time_rates))
-    fig.add_trace(go.Bar(name="고객 만족도", x=airlines, y=customer_satisfaction))
-    
-    fig.update_layout(
-        title="항공사별 성과 비교",
-        plot_bgcolor='white',
-        paper_bgcolor='white',
-        font_color='#2c3e50',
-        height=400
-    )
-    st.plotly_chart(fig, use_container_width=True)
     
     # 실시간 항공 교통 현황
     st.markdown('<h3 class="section-title">🛩️ 실시간 항공 교통 현황</h3>', unsafe_allow_html=True)
+    
+    # 세션 상태에 맵 데이터 캐싱
+    if "flight_map_data" not in st.session_state:
+        # 고정된 시드로 일관된 항공편 위치 생성
+        np.random.seed(192021)
+        flight_positions = []
+        for _ in range(20):
+            lat = np.random.uniform(30, 45)
+            lon = np.random.uniform(120, 150)
+            flight_positions.append({"lat": lat, "lon": lon})
+        
+        st.session_state["flight_map_data"] = flight_positions
     
     # 시뮬레이션된 항공 교통 맵
     m = folium.Map(
@@ -1136,12 +1115,11 @@ def display_advanced_dashboard():
             icon=folium.Icon(color='blue', icon='plane')
         ).add_to(m)
     
-    # 시뮬레이션된 항공편들
-    for _ in range(20):
-        lat = np.random.uniform(30, 45)
-        lon = np.random.uniform(120, 150)
+    # 캐싱된 항공편 위치 사용
+    flight_positions = st.session_state["flight_map_data"]
+    for pos in flight_positions:
         folium.Marker(
-            [lat, lon],
+            [pos["lat"], pos["lon"]],
             icon=folium.Icon(color='red', icon='plane', prefix='fa')
         ).add_to(m)
     
