@@ -1082,15 +1082,26 @@ def display_advanced_dashboard():
     
     # 세션 상태에 맵 데이터 캐싱
     if "flight_map_data" not in st.session_state:
-        # 고정된 시드로 일관된 항공편 위치 생성
+        # 고정된 시드로 일관된 항공편 위치 및 정보 생성
         np.random.seed(192021)
         flight_positions = []
-        for _ in range(20):
+        flight_details = []
+        
+        for i in range(20):
             lat = np.random.uniform(30, 45)
             lon = np.random.uniform(120, 150)
             flight_positions.append({"lat": lat, "lon": lon})
+            
+            # 항공편 상세 정보 생성
+            flight_details.append({
+                "flight_number": f"{chr(65 + i % 26)}{100 + i}",
+                "altitude": f"{np.random.randint(30000, 40000):,} ft",
+                "speed": f"{np.random.randint(800, 950)} km/h",
+                "route": "ICN → NRT"
+            })
         
         st.session_state["flight_map_data"] = flight_positions
+        st.session_state["flight_details"] = flight_details
     
     # 시뮬레이션된 항공 교통 맵
     m = folium.Map(
@@ -1115,15 +1126,31 @@ def display_advanced_dashboard():
             icon=folium.Icon(color='blue', icon='plane')
         ).add_to(m)
     
-    # 캐싱된 항공편 위치 사용
+    # 캐싱된 항공편 위치 및 정보 사용
     flight_positions = st.session_state["flight_map_data"]
-    for pos in flight_positions:
+    flight_details = st.session_state["flight_details"]
+    
+    for i, (pos, details) in enumerate(zip(flight_positions, flight_details)):
+        # 항공편 정보 생성
+        flight_info = f"""
+        <div style="font-family: Arial; font-size: 12px; line-height: 1.4;">
+            <b>✈️ Flight {details['flight_number']}</b><br>
+            <b>Status:</b> In Flight<br>
+            <b>Altitude:</b> {details['altitude']}<br>
+            <b>Speed:</b> {details['speed']}<br>
+            <b>Route:</b> {details['route']}
+        </div>
+        """
+        
         folium.Marker(
             [pos["lat"], pos["lon"]],
+            popup=folium.Popup(flight_info, max_width=200),
+            tooltip=f"Flight {details['flight_number']}",
             icon=folium.Icon(color='red', icon='plane', prefix='fa')
         ).add_to(m)
     
-    st_folium(m, width=700, height=350)
+    # 지도 크기를 1496*471에 맞게 조정
+    st_folium(m, width=1496, height=471)
 
 if __name__ == "__main__":
     main()
