@@ -502,8 +502,55 @@ def main():
     </div>
     """, unsafe_allow_html=True)
     
-    # 기본 대시보드만 표시
-    display_advanced_dashboard()
+    # 메인 검색 영역
+    st.markdown("""
+    <div class="main-search-container fade-in">
+        <h2 class="search-title">Advanced Flight Search</h2>
+        <p class="search-subtitle">FlightAware is at the heart of aviation as a leader in providing accurate and actionable advanced data and insights for all aviation decisions.</p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Flight 번호 검색
+    st.markdown("**Search by Flight #:**")
+    col1, col2 = st.columns([4, 1])
+    with col1:
+        flight_search = st.text_input("", placeholder="Enter flight number", key="main_flight_search_adv", label_visibility="collapsed")
+    with col2:
+        flight_search_btn = st.button("Search", key="main_flight_btn_adv")
+    
+    # Route 검색
+    st.markdown("**Search by Route:**")
+    col1, col2, col3, col4 = st.columns([2, 0.5, 2, 1])
+    with col1:
+        departure_search = st.text_input("", placeholder="Departure", key="main_departure_adv", label_visibility="collapsed")
+    with col2:
+        st.markdown('<div style="text-align: center; color: #6c757d; font-size: 0.7rem; margin-top: 0.5rem;">⇄</div>', unsafe_allow_html=True)
+    with col3:
+        destination_search = st.text_input("", placeholder="Destination", key="main_destination_adv", label_visibility="collapsed")
+    with col4:
+        route_search_btn = st.button("Search", key="main_route_btn_adv")
+    
+    # 검색 결과 처리
+    if flight_search_btn and flight_search:
+        st.session_state["flight_search_adv"] = True
+        st.session_state["flight_number_adv"] = flight_search
+    
+    if route_search_btn and departure_search and destination_search:
+        st.session_state["route_search_adv"] = True
+        st.session_state["departure_adv"] = departure_search
+        st.session_state["destination_adv"] = destination_search
+    
+    # 메인 컨텐츠
+    if st.session_state.get("flight_search_adv", False):
+        display_detailed_flight_info(st.session_state.get("flight_number_adv", ""))
+        
+    elif st.session_state.get("route_search_adv", False):
+        st.info(f"Route Search: {st.session_state.get('departure_adv', '')} → {st.session_state.get('destination_adv', '')}")
+        # Route 검색 결과 표시 (추후 구현)
+        
+    else:
+        # 기본 대시보드 표시
+        display_advanced_dashboard()
 
 def display_detailed_flight_info(flight_number: str):
     """상세 항공편 정보 표시"""
