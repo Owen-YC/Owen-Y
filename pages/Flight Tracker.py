@@ -502,117 +502,8 @@ def main():
     </div>
     """, unsafe_allow_html=True)
     
-    # 메인 검색 영역 (Streamlit 네이티브 컴포넌트로 변경)
-    st.markdown("""
-    <div class="main-search-container fade-in">
-        <h2 class="search-title">Advanced Flight Search</h2>
-        <p class="search-subtitle">FlightAware is at the heart of aviation as a leader in providing accurate and actionable advanced data and insights for all aviation decisions.</p>
-    </div>
-    """, unsafe_allow_html=True)
-    
-    # Flight 번호 검색
-    st.markdown("**Search by Flight #:**")
-    col1, col2 = st.columns([4, 1])
-    with col1:
-        flight_search = st.text_input("", placeholder="Enter flight number", key="main_flight_search_adv", label_visibility="collapsed")
-    with col2:
-        flight_search_btn = st.button("Search", key="main_flight_btn_adv")
-    
-    # Route 검색
-    st.markdown("**Search by Route:**")
-    col1, col2, col3, col4 = st.columns([2, 0.5, 2, 1])
-    with col1:
-        departure_search = st.text_input("", placeholder="Departure", key="main_departure_adv", label_visibility="collapsed")
-    with col2:
-        st.markdown('<div style="text-align: center; color: #6c757d; font-size: 0.7rem; margin-top: 0.5rem;">⇄</div>', unsafe_allow_html=True)
-    with col3:
-        destination_search = st.text_input("", placeholder="Destination", key="main_destination_adv", label_visibility="collapsed")
-    with col4:
-        route_search_btn = st.button("Search", key="main_route_btn_adv")
-    
-    # 검색 결과 처리
-    if flight_search_btn and flight_search:
-        st.session_state["flight_search_adv"] = True
-        st.session_state["flight_number_adv"] = flight_search
-        # st.rerun() 제거 - 자동으로 리렌더링됨
-    
-    if route_search_btn and departure_search and destination_search:
-        st.session_state["route_search_adv"] = True
-        st.session_state["departure_adv"] = departure_search
-        st.session_state["destination_adv"] = destination_search
-        # st.rerun() 제거 - 자동으로 리렌더링됨
-    
-    # 사이드바 (간소화)
-    with st.sidebar:
-        st.markdown("### Advanced Search")
-        
-        search_type = st.selectbox(
-            "Search Type",
-            ["Detailed Flight Info", "Real-time Tracking", "Airport Status", "Weather Info", "Delay Analysis", "Flight Comparison"],
-            key="advanced_search_type"
-        )
-        
-        if search_type == "Detailed Flight Info":
-            flight_number = st.text_input("Flight Number", "KE001", key="advanced_flight_num")
-            search_button = st.button("🔍 Search", key="detailed_search")
-            
-        elif search_type == "Real-time Tracking":
-            flight_number = st.text_input("Flight Number", "KE001", key="track_flight_num")
-            search_button = st.button("📍 Track", key="realtime_track")
-            
-        elif search_type == "Airport Status":
-            airport_code = st.text_input("Airport Code", "ICN", key="status_airport_code").upper()
-            search_button = st.button("🏢 Status", key="airport_status")
-            
-        elif search_type == "Weather Info":
-            airport_code = st.text_input("Airport Code", "ICN", key="weather_airport_code").upper()
-            search_button = st.button("🌤️ Weather", key="weather_search")
-            
-        elif search_type == "Delay Analysis":
-            airport_code = st.text_input("Airport Code", "ICN", key="delay_airport_code").upper()
-            search_button = st.button("⏰ Analysis", key="delay_analysis")
-            
-        else:  # Flight Comparison
-            flight1 = st.text_input("First Flight", "KE001", key="compare_flight1")
-            flight2 = st.text_input("Second Flight", "OZ101", key="compare_flight2")
-            search_button = st.button("⚖️ Compare", key="flight_compare")
-    
-    # 메인 컨텐츠
-    if st.session_state.get("flight_search_adv", False):
-        display_detailed_flight_info(st.session_state.get("flight_number_adv", ""))
-        
-    elif st.session_state.get("route_search_adv", False):
-        st.info(f"Route Search: {st.session_state.get('departure_adv', '')} → {st.session_state.get('destination_adv', '')}")
-        # Route 검색 결과 표시 (추후 구현)
-        
-    elif search_type == "Detailed Flight Info" and st.session_state.get("detailed_search", False):
-        display_detailed_flight_info(flight_number)
-        
-    elif search_type == "Real-time Tracking" and st.session_state.get("realtime_track", False):
-        display_realtime_tracking(flight_number)
-        
-    elif search_type == "Airport Status" and st.session_state.get("airport_status", False):
-        display_airport_status(airport_code)
-        
-    elif search_type == "Weather Info" and st.session_state.get("weather_search", False):
-        display_weather_info(airport_code)
-        
-    elif search_type == "Delay Analysis" and st.session_state.get("delay_analysis", False):
-        display_delay_analysis(airport_code)
-        
-    elif search_type == "Flight Comparison" and st.session_state.get("flight_compare", False):
-        display_flight_comparison(flight1, flight2)
-    
-    # 기본 대시보드
-    if not any([st.session_state.get("flight_search_adv", False),
-                st.session_state.get("route_search_adv", False),
-                st.session_state.get("detailed_search", False), 
-                st.session_state.get("realtime_track", False),
-                st.session_state.get("airport_status", False),
-                st.session_state.get("weather_search", False),
-                st.session_state.get("delay_analysis", False),
-                st.session_state.get("flight_compare", False)]):
-        display_advanced_dashboard()
+    # 기본 대시보드만 표시
+    display_advanced_dashboard()
 
 def display_detailed_flight_info(flight_number: str):
     """상세 항공편 정보 표시"""
@@ -1077,13 +968,12 @@ def display_advanced_dashboard():
     st.dataframe(df, use_container_width=True)
     
     
-    # 실시간 항공 교통 현황
-    st.markdown('<h3 class="section-title">🛩️ Real-time Flight Status</h3>', unsafe_allow_html=True)
-    
-    # 새로고침 버튼 추가
-    col1, col2, col3 = st.columns([1, 2, 1])
+    # 실시간 항공 교통 현황 (제목과 새로고침 버튼을 같은 줄에)
+    col1, col2 = st.columns([4, 1])
+    with col1:
+        st.markdown('<h3 class="section-title">🛩️ Real-time Flight Status</h3>', unsafe_allow_html=True)
     with col2:
-        if st.button("🔄 Refresh Flight Data", key="refresh_flights", help="Click to update flight positions"):
+        if st.button("🔄", key="refresh_flights", help="Refresh flight data", use_container_width=True):
             # 세션 상태 초기화하여 새 데이터 생성
             if "flight_map_data" in st.session_state:
                 del st.session_state["flight_map_data"]
@@ -1101,26 +991,74 @@ def display_advanced_dashboard():
         flight_positions = []
         flight_details = []
         
-        # 더 현실적인 항공편 데이터 생성
-        airlines = ["KE", "OZ", "7C", "BX", "LJ", "TW", "ZE", "NH", "JL", "CA"]
-        routes = [
-            "ICN → NRT", "ICN → LAX", "ICN → FRA", "ICN → SIN",
-            "GMP → CJU", "CJU → ICN", "PUS → ICN", "CJU → GMP",
-            "ICN → BKK", "ICN → HKG", "ICN → TPE", "GMP → PUS",
-            "NRT → ICN", "LAX → ICN", "FRA → ICN", "SIN → ICN"
+        # 전 세계 주요 항공사 및 노선 데이터
+        global_airlines = [
+            "KE", "OZ", "NH", "JL", "CA", "MU", "CZ", "3U",  # 아시아
+            "AA", "UA", "DL", "WN", "B6", "AS", "F9",        # 미국
+            "LH", "AF", "BA", "KL", "LX", "OS", "SK",        # 유럽
+            "QF", "VA", "NZ", "JQ",                          # 오세아니아
+            "EK", "QR", "EY", "SV", "MS", "TK",              # 중동/아프리카
+            "AC", "WS", "TS", "PD",                          # 캐나다
+            "AV", "CM", "AR", "LA", "JJ"                     # 남미
         ]
-        statuses = ["On Time", "Delayed", "Boarding", "In Flight", "Approaching", "Departed"]
         
-        for i in range(25):  # 항공편 수 증가
-            # 한국 주변 좌표로 제한
-            lat = 33.0 + np.random.uniform(-5, 8)  # 한국 주변 위도
-            lon = 125.0 + np.random.uniform(-5, 10)  # 한국 주변 경도
+        global_routes = [
+            # 아시아 내
+            "ICN → NRT", "ICN → LAX", "ICN → FRA", "ICN → SIN", "ICN → BKK", "ICN → HKG", "ICN → TPE",
+            "NRT → LAX", "NRT → JFK", "NRT → LHR", "NRT → CDG", "NRT → FRA",
+            "PEK → LAX", "PEK → JFK", "PEK → LHR", "PEK → CDG", "PEK → FRA",
+            "SIN → LHR", "SIN → CDG", "SIN → FRA", "SIN → JFK", "SIN → LAX",
+            # 대서양 횡단
+            "JFK → LHR", "JFK → CDG", "JFK → FRA", "JFK → AMS", "JFK → ZUR",
+            "LAX → LHR", "LAX → CDG", "LAX → FRA", "LAX → AMS",
+            "LHR → JFK", "LHR → LAX", "LHR → ORD", "LHR → MIA",
+            "CDG → JFK", "CDG → LAX", "CDG → ORD", "CDG → MIA",
+            # 태평양 횡단
+            "LAX → NRT", "LAX → ICN", "LAX → PEK", "LAX → PVG",
+            "JFK → NRT", "JFK → ICN", "JFK → PEK", "JFK → PVG",
+            # 유럽 내
+            "LHR → CDG", "LHR → FRA", "LHR → AMS", "LHR → ZUR", "LHR → VIE",
+            "CDG → FRA", "CDG → AMS", "CDG → ZUR", "CDG → VIE",
+            # 중동/아프리카
+            "DXB → LHR", "DXB → CDG", "DXB → JFK", "DXB → LAX",
+            "DOH → LHR", "DOH → CDG", "DOH → JFK", "DOH → LAX",
+            # 오세아니아
+            "SYD → LAX", "SYD → LHR", "SYD → CDG", "SYD → JFK",
+            "MEL → LAX", "MEL → LHR", "MEL → CDG", "MEL → JFK"
+        ]
+        
+        statuses = ["On Time", "Delayed", "Boarding", "In Flight", "Approaching", "Departed", "Landed"]
+        
+        # 전 세계 주요 항공로에 따른 비행기 위치 생성
+        for i in range(50):  # 항공편 수 대폭 증가
+            # 전 세계 좌표 범위
+            region = np.random.choice(["asia_pacific", "trans_pacific", "trans_atlantic", "europe", "americas", "middle_east_africa"])
+            
+            if region == "asia_pacific":
+                lat = np.random.uniform(10, 50)   # 아시아-태평양
+                lon = np.random.uniform(100, 180)
+            elif region == "trans_pacific":
+                lat = np.random.uniform(20, 60)   # 태평양 횡단
+                lon = np.random.uniform(120, 240)
+            elif region == "trans_atlantic":
+                lat = np.random.uniform(30, 70)   # 대서양 횡단
+                lon = np.random.uniform(-80, 20)
+            elif region == "europe":
+                lat = np.random.uniform(35, 70)   # 유럽
+                lon = np.random.uniform(-10, 40)
+            elif region == "americas":
+                lat = np.random.uniform(10, 70)   # 아메리카
+                lon = np.random.uniform(-180, -50)
+            else:  # middle_east_africa
+                lat = np.random.uniform(-35, 50)  # 중동-아프리카
+                lon = np.random.uniform(-20, 60)
+            
             flight_positions.append({"lat": lat, "lon": lon})
             
             # 항공편 상세 정보 생성
-            airline = np.random.choice(airlines)
+            airline = np.random.choice(global_airlines)
             flight_num = f"{airline}{np.random.randint(100, 9999)}"
-            route = np.random.choice(routes)
+            route = np.random.choice(global_routes)
             status = np.random.choice(statuses)
             altitude = np.random.randint(5000, 45000)
             speed = np.random.randint(300, 900)
@@ -1136,27 +1074,86 @@ def display_advanced_dashboard():
         st.session_state["flight_map_data"] = flight_positions
         st.session_state["flight_details"] = flight_details
     
-    # 시뮬레이션된 항공 교통 맵
+    # 전 세계 항공 교통 맵
     m = folium.Map(
-        location=[35.0, 135.0],
-        zoom_start=5,
+        location=[20.0, 0.0],  # 전 세계 중심
+        zoom_start=2,          # 전 세계 보기
         tiles='OpenStreetMap'
     )
     
-    # 주요 공항 마커
+    # 전 세계 주요 허브 공항 마커
     major_airports = [
-        {"name": "ICN", "lat": 37.4602, "lon": 126.4407},
-        {"name": "NRT", "lat": 35.7720, "lon": 140.3928},
-        {"name": "HND", "lat": 35.5494, "lon": 139.7798},
-        {"name": "PEK", "lat": 40.0799, "lon": 116.6031},
-        {"name": "PVG", "lat": 31.1434, "lon": 121.8052}
+        # 아시아-태평양
+        {"name": "ICN", "lat": 37.4602, "lon": 126.4407, "city": "Seoul"},
+        {"name": "NRT", "lat": 35.7720, "lon": 140.3928, "city": "Tokyo"},
+        {"name": "HND", "lat": 35.5494, "lon": 139.7798, "city": "Tokyo"},
+        {"name": "PEK", "lat": 40.0799, "lon": 116.6031, "city": "Beijing"},
+        {"name": "PVG", "lat": 31.1434, "lon": 121.8052, "city": "Shanghai"},
+        {"name": "HKG", "lat": 22.3080, "lon": 113.9185, "city": "Hong Kong"},
+        {"name": "SIN", "lat": 1.3644, "lon": 103.9915, "city": "Singapore"},
+        {"name": "BKK", "lat": 13.6900, "lon": 100.7501, "city": "Bangkok"},
+        {"name": "KUL", "lat": 2.7456, "lon": 101.7099, "city": "Kuala Lumpur"},
+        {"name": "MNL", "lat": 14.5086, "lon": 121.0196, "city": "Manila"},
+        {"name": "CGK", "lat": -6.1256, "lon": 106.6558, "city": "Jakarta"},
+        {"name": "SYD", "lat": -33.9399, "lon": 151.1753, "city": "Sydney"},
+        {"name": "MEL", "lat": -37.6733, "lon": 144.8433, "city": "Melbourne"},
+        
+        # 유럽
+        {"name": "LHR", "lat": 51.4700, "lon": -0.4543, "city": "London"},
+        {"name": "CDG", "lat": 49.0097, "lon": 2.5479, "city": "Paris"},
+        {"name": "FRA", "lat": 50.0379, "lon": 8.5622, "city": "Frankfurt"},
+        {"name": "AMS", "lat": 52.3105, "lon": 4.7683, "city": "Amsterdam"},
+        {"name": "MAD", "lat": 40.4983, "lon": -3.5676, "city": "Madrid"},
+        {"name": "FCO", "lat": 41.8003, "lon": 12.2389, "city": "Rome"},
+        {"name": "ZUR", "lat": 47.4647, "lon": 8.5492, "city": "Zurich"},
+        {"name": "VIE", "lat": 48.1103, "lon": 16.5697, "city": "Vienna"},
+        {"name": "IST", "lat": 41.2753, "lon": 28.7519, "city": "Istanbul"},
+        
+        # 북미
+        {"name": "JFK", "lat": 40.6413, "lon": -73.7781, "city": "New York"},
+        {"name": "LAX", "lat": 33.9416, "lon": -118.4085, "city": "Los Angeles"},
+        {"name": "ORD", "lat": 41.9786, "lon": -87.9048, "city": "Chicago"},
+        {"name": "ATL", "lat": 33.6407, "lon": -84.4277, "city": "Atlanta"},
+        {"name": "DFW", "lat": 32.8968, "lon": -97.0380, "city": "Dallas"},
+        {"name": "DEN", "lat": 39.8561, "lon": -104.6737, "city": "Denver"},
+        {"name": "SFO", "lat": 37.6213, "lon": -122.3790, "city": "San Francisco"},
+        {"name": "SEA", "lat": 47.4502, "lon": -122.3088, "city": "Seattle"},
+        {"name": "MIA", "lat": 25.7959, "lon": -80.2870, "city": "Miami"},
+        {"name": "YYZ", "lat": 43.6777, "lon": -79.6248, "city": "Toronto"},
+        {"name": "YVR", "lat": 49.1967, "lon": -123.1815, "city": "Vancouver"},
+        
+        # 중동/아프리카
+        {"name": "DXB", "lat": 25.2532, "lon": 55.3657, "city": "Dubai"},
+        {"name": "DOH", "lat": 25.2611, "lon": 51.5651, "city": "Doha"},
+        {"name": "AUH", "lat": 24.4331, "lon": 54.6511, "city": "Abu Dhabi"},
+        {"name": "JNB", "lat": -26.1367, "lon": 28.2411, "city": "Johannesburg"},
+        {"name": "CAI", "lat": 30.1127, "lon": 31.4000, "city": "Cairo"},
+        {"name": "NBO", "lat": -1.3192, "lon": 36.9278, "city": "Nairobi"},
+        
+        # 남미
+        {"name": "GRU", "lat": -23.4356, "lon": -46.4731, "city": "São Paulo"},
+        {"name": "EZE", "lat": -34.8222, "lon": -58.5358, "city": "Buenos Aires"},
+        {"name": "LIM", "lat": -12.0219, "lon": -77.1143, "city": "Lima"},
+        {"name": "BOG", "lat": 4.7016, "lon": -74.1469, "city": "Bogotá"}
     ]
     
     for airport in major_airports:
+        # 공항 정보 팝업
+        airport_info = f"""
+        <div style="font-family: Arial; font-size: 12px; line-height: 1.4; width: 150px;">
+            <div style="background: #e3f2fd; padding: 8px; border-radius: 5px; border-left: 3px solid #2196f3;">
+                <b style="color: #1976d2; font-size: 14px;">✈️ {airport["name"]}</b><br>
+                <span style="color: #424242;">{airport["city"]}</span><br>
+                <small style="color: #666;">Major Hub Airport</small>
+            </div>
+        </div>
+        """
+        
         folium.Marker(
             [airport["lat"], airport["lon"]],
-            popup=airport["name"],
-            icon=folium.Icon(color='blue', icon='plane')
+            popup=folium.Popup(airport_info, max_width=200),
+            tooltip=f"{airport['name']} - {airport['city']}",
+            icon=folium.Icon(color='blue', icon='plane', prefix='fa')
         ).add_to(m)
     
     # 캐싱된 항공편 위치 및 정보 사용
