@@ -983,10 +983,9 @@ def display_flight_comparison(flight1: str, flight2: str):
 
 def display_advanced_dashboard():
     """고급 대시보드 표시"""
-    st.markdown('<h2 class="section-title">📊 고급 항공 현황 대시보드</h2>', unsafe_allow_html=True)
     
     # 주요 공항 현황
-    st.markdown('<h3 class="section-title">🏢 주요 공항 현황</h3>', unsafe_allow_html=True)
+    st.markdown('<h3 class="section-title">🏢 Major Airport Status</h3>', unsafe_allow_html=True)
     
     # 세션 상태에 데이터 캐싱
     if "advanced_airport_data" not in st.session_state:
@@ -1000,13 +999,26 @@ def display_advanced_dashboard():
             delay_info = flight_api.get_airport_delays(airport)
             weather = flight_api.get_weather_info(airport)
             
+            # 날씨 조건에 따른 아이콘 매핑
+            weather_icons = {
+                "맑음": "☀️",
+                "구름많음": "⛅",
+                "흐림": "☁️",
+                "비": "🌧️",
+                "눈": "❄️",
+                "안개": "🌫️",
+                "폭우": "⛈️",
+                "폭설": "🌨️"
+            }
+            weather_icon = weather_icons.get(weather["condition"], "🌤️")
+            
             airport_data.append({
                 "공항": airport,
                 "총 항공편": delay_info["total_flights"],
                 "지연 항공편": delay_info["delayed_flights"],
                 "평균 지연": f"{delay_info['average_delay']}분",
                 "온도": f"{weather['temperature']}°C",
-                "날씨": weather["condition"]
+                "날씨": f"{weather_icon} {weather['condition']}"
             })
         
         st.session_state["advanced_airport_data"] = airport_data
@@ -1020,7 +1032,7 @@ def display_advanced_dashboard():
     with col1:
         st.markdown('<h3 class="section-title">🛩️ Real-time Flight Status</h3>', unsafe_allow_html=True)
     with col2:
-        if st.button("🔄", key="refresh_flights", help="Refresh flight data", use_container_width=True):
+        if st.button("Refresh", key="refresh_flights", help="Refresh flight data", use_container_width=True):
             # 세션 상태 초기화하여 새 데이터 생성
             if "flight_map_data" in st.session_state:
                 del st.session_state["flight_map_data"]
