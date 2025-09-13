@@ -501,7 +501,10 @@ def main():
             </div>
         </div>
     </div>
+    """, unsafe_allow_html=True)
     
+    # JavaScript를 별도로 추가
+    st.markdown("""
     <script>
     // 검색 버튼 이벤트 리스너
     document.addEventListener('DOMContentLoaded', function() {
