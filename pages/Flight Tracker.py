@@ -30,10 +30,10 @@ st.markdown("""
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
     
-    /* 메인 헤더 - 컴팩트 */
+    /* 메인 헤더 - 밝은 회색 */
     .main-header {
-        background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
-        color: white;
+        background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
+        color: #495057;
         padding: 0.8rem 1rem;
         border-radius: 6px;
         margin-bottom: 1rem;
@@ -50,7 +50,7 @@ st.markdown("""
         left: -100%;
         width: 100%;
         height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+        background: linear-gradient(90deg, transparent, rgba(73, 80, 87, 0.1), transparent);
         animation: shimmer 3s infinite;
     }
     
@@ -63,7 +63,7 @@ st.markdown("""
     }
     
     .main-subtitle {
-        font-size: 0.75rem;
+        font-size: 0.7rem;
         opacity: 0.8;
         margin: 0.2rem 0 0 0;
         position: relative;
@@ -75,11 +75,24 @@ st.markdown("""
         background: white;
         border: 1px solid #e1e5e9;
         border-radius: 6px;
-        padding: 0.8rem;
-        margin: 0.5rem 0;
+        padding: 0.6rem;
+        margin: 0.4rem 0;
         box-shadow: 0 2px 6px rgba(0,0,0,0.08);
         transition: all 0.3s ease;
         animation: fadeInUp 0.5s ease-out;
+        font-size: 0.8rem;
+    }
+    
+    .flight-card h4 {
+        font-size: 0.75rem;
+        margin: 0 0 0.3rem 0;
+        color: #6c757d;
+    }
+    
+    .flight-card p {
+        font-size: 0.75rem;
+        margin: 0.2rem 0;
+        color: #2c3e50;
     }
     
     .flight-card:hover {
@@ -91,9 +104,9 @@ st.markdown("""
     /* 섹션 제목 - 컴팩트 */
     .section-title {
         color: #2c3e50;
-        font-size: 1.1rem;
+        font-size: 0.9rem;
         font-weight: 600;
-        margin: 1rem 0 0.5rem 0;
+        margin: 0.8rem 0 0.4rem 0;
         padding-left: 0.5rem;
         border-left: 3px solid #6c757d;
     }
@@ -103,11 +116,23 @@ st.markdown("""
         background: white;
         border: 1px solid #e1e5e9;
         border-radius: 6px;
-        padding: 0.6rem;
+        padding: 0.5rem;
         text-align: center;
         margin: 0.3rem;
         box-shadow: 0 1px 4px rgba(0,0,0,0.06);
         transition: all 0.3s ease;
+    }
+    
+    .metric-container h4 {
+        font-size: 0.7rem;
+        margin: 0 0 0.3rem 0;
+        color: #6c757d;
+    }
+    
+    .metric-container h3 {
+        font-size: 0.9rem;
+        margin: 0;
+        color: #2c3e50;
     }
     
     .metric-container:hover {
@@ -363,44 +388,44 @@ def main():
     # 메인 헤더
     st.markdown("""
     <div class="main-header fade-in">
-        <h1 class="main-title">✈️ FlightAware Tracker</h1>
-        <p class="main-subtitle">실시간 항공편 추적 및 분석 시스템</p>
+        <h1 class="main-title">Flight Tracker</h1>
+        <p class="main-subtitle">Real-time Flight Tracking & Analysis System</p>
     </div>
     """, unsafe_allow_html=True)
     
     # 사이드바
     with st.sidebar:
-        st.markdown("### 🛫 검색 옵션")
+        st.markdown("### Search Options")
         
         search_type = st.selectbox(
-            "검색 유형",
-            ["항공편 조회", "공항 출발편", "공항 도착편", "항공편 추적"],
+            "Search Type",
+            ["Flight Info", "Departures", "Arrivals", "Flight Tracking"],
             key="search_type"
         )
         
-        if search_type == "항공편 조회":
-            flight_number = st.text_input("항공편 번호", "KE001", key="flight_num")
-            search_button = st.button("🔍 조회", key="flight_search")
+        if search_type == "Flight Info":
+            flight_number = st.text_input("Flight Number", "KE001", key="flight_num")
+            search_button = st.button("🔍 Search", key="flight_search")
             
-        elif search_type in ["공항 출발편", "공항 도착편"]:
-            airport_code = st.text_input("공항 코드", "ICN", key="airport_code").upper()
-            search_button = st.button("🔍 조회", key="airport_search")
+        elif search_type in ["Departures", "Arrivals"]:
+            airport_code = st.text_input("Airport Code", "ICN", key="airport_code").upper()
+            search_button = st.button("🔍 Search", key="airport_search")
             
-        else:  # 항공편 추적
-            flight_number = st.text_input("항공편 번호", "KE001", key="track_num")
-            search_button = st.button("📍 추적", key="track_search")
+        else:  # Flight Tracking
+            flight_number = st.text_input("Flight Number", "KE001", key="track_num")
+            search_button = st.button("📍 Track", key="track_search")
     
     # 메인 컨텐츠
-    if search_type == "항공편 조회" and st.session_state.get("flight_search", False):
+    if search_type == "Flight Info" and st.session_state.get("flight_search", False):
         display_flight_info(flight_number)
         
-    elif search_type == "공항 출발편" and st.session_state.get("airport_search", False):
+    elif search_type == "Departures" and st.session_state.get("airport_search", False):
         display_airport_departures(airport_code)
         
-    elif search_type == "공항 도착편" and st.session_state.get("airport_search", False):
+    elif search_type == "Arrivals" and st.session_state.get("airport_search", False):
         display_airport_arrivals(airport_code)
         
-    elif search_type == "항공편 추적" and st.session_state.get("track_search", False):
+    elif search_type == "Flight Tracking" and st.session_state.get("track_search", False):
         display_flight_tracking(flight_number)
     
     # 기본 대시보드
@@ -411,7 +436,7 @@ def main():
 
 def display_flight_info(flight_number: str):
     """항공편 정보 표시"""
-    st.markdown('<h2 class="section-title">📋 항공편 정보</h2>', unsafe_allow_html=True)
+    st.markdown('<h2 class="section-title">📋 Flight Information</h2>', unsafe_allow_html=True)
     
     with st.spinner("항공편 정보를 조회하는 중..."):
         time.sleep(1)  # API 호출 시뮬레이션
@@ -423,21 +448,21 @@ def display_flight_info(flight_number: str):
     with col1:
         st.markdown(f"""
         <div class="metric-container">
-            <h4>✈️ 항공편</h4>
+            <h4>✈️ Flight</h4>
             <h3>{flight_info["flight_number"]}</h3>
         </div>
         """, unsafe_allow_html=True)
     with col2:
         st.markdown(f"""
         <div class="metric-container">
-            <h4>🏢 항공사</h4>
+            <h4>🏢 Airline</h4>
             <h3>{flight_info["airline"]}</h3>
         </div>
         """, unsafe_allow_html=True)
     with col3:
         st.markdown(f"""
         <div class="metric-container">
-            <h4>🛩️ 항공기</h4>
+            <h4>🛩️ Aircraft</h4>
             <h3>{flight_info["aircraft"]}</h3>
         </div>
         """, unsafe_allow_html=True)
@@ -445,19 +470,19 @@ def display_flight_info(flight_number: str):
         status_color = "🟢" if flight_info["status"] == "On Time" else "🟡"
         st.markdown(f"""
         <div class="metric-container">
-            <h4>📊 상태</h4>
+            <h4>📊 Status</h4>
             <h3>{status_color} {flight_info['status']}</h3>
         </div>
         """, unsafe_allow_html=True)
     
     # 출발/도착 정보 - 컴팩트
-    st.markdown('<h3 class="section-title">🛫 출발 정보</h3>', unsafe_allow_html=True)
+    st.markdown('<h3 class="section-title">🛫 Departure Information</h3>', unsafe_allow_html=True)
     dep_col1, dep_col2, dep_col3 = st.columns(3)
     
     with dep_col1:
         st.markdown(f"""
         <div class="flight-card">
-            <h4>🏢 공항</h4>
+            <h4>🏢 Airport</h4>
             <p><strong>{flight_info['departure']['airport']}</strong> - {flight_info['departure']['airport_name']}</p>
             <p>{flight_info['departure']['city']}, {flight_info['departure']['country']}</p>
         </div>
@@ -466,28 +491,28 @@ def display_flight_info(flight_number: str):
     with dep_col2:
         st.markdown(f"""
         <div class="flight-card">
-            <h4>⏰ 시간</h4>
-            <p><strong>예정:</strong> {flight_info['departure']['scheduled_time']}</p>
-            <p><strong>실제:</strong> {flight_info['departure']['actual_time']}</p>
+            <h4>⏰ Time</h4>
+            <p><strong>Scheduled:</strong> {flight_info['departure']['scheduled_time']}</p>
+            <p><strong>Actual:</strong> {flight_info['departure']['actual_time']}</p>
         </div>
         """, unsafe_allow_html=True)
     
     with dep_col3:
         st.markdown(f"""
         <div class="flight-card">
-            <h4>🚪 게이트</h4>
-            <p><strong>게이트:</strong> {flight_info['departure']['gate']}</p>
-            <p><strong>터미널:</strong> {flight_info['departure']['terminal']}</p>
+            <h4>🚪 Gate</h4>
+            <p><strong>Gate:</strong> {flight_info['departure']['gate']}</p>
+            <p><strong>Terminal:</strong> {flight_info['departure']['terminal']}</p>
         </div>
         """, unsafe_allow_html=True)
     
-    st.markdown('<h3 class="section-title">🛬 도착 정보</h3>', unsafe_allow_html=True)
+    st.markdown('<h3 class="section-title">🛬 Arrival Information</h3>', unsafe_allow_html=True)
     arr_col1, arr_col2, arr_col3 = st.columns(3)
     
     with arr_col1:
         st.markdown(f"""
         <div class="flight-card">
-            <h4>🏢 공항</h4>
+            <h4>🏢 Airport</h4>
             <p><strong>{flight_info['arrival']['airport']}</strong> - {flight_info['arrival']['airport_name']}</p>
             <p>{flight_info['arrival']['city']}, {flight_info['arrival']['country']}</p>
         </div>
@@ -496,52 +521,52 @@ def display_flight_info(flight_number: str):
     with arr_col2:
         st.markdown(f"""
         <div class="flight-card">
-            <h4>⏰ 시간</h4>
-            <p><strong>예정:</strong> {flight_info['arrival']['scheduled_time']}</p>
-            <p><strong>실제:</strong> {flight_info['arrival']['actual_time']}</p>
+            <h4>⏰ Time</h4>
+            <p><strong>Scheduled:</strong> {flight_info['arrival']['scheduled_time']}</p>
+            <p><strong>Actual:</strong> {flight_info['arrival']['actual_time']}</p>
         </div>
         """, unsafe_allow_html=True)
     
     with arr_col3:
         st.markdown(f"""
         <div class="flight-card">
-            <h4>🚪 게이트</h4>
-            <p><strong>게이트:</strong> {flight_info['arrival']['gate']}</p>
-            <p><strong>터미널:</strong> {flight_info['arrival']['terminal']}</p>
+            <h4>🚪 Gate</h4>
+            <p><strong>Gate:</strong> {flight_info['arrival']['gate']}</p>
+            <p><strong>Terminal:</strong> {flight_info['arrival']['terminal']}</p>
         </div>
         """, unsafe_allow_html=True)
     
     # 항공편 상세 정보 - 컴팩트
-    st.markdown('<h3 class="section-title">📊 항공편 상세</h3>', unsafe_allow_html=True)
+    st.markdown('<h3 class="section-title">📊 Flight Details</h3>', unsafe_allow_html=True)
     detail_col1, detail_col2, detail_col3 = st.columns(3)
     
     with detail_col1:
         st.markdown(f"""
         <div class="metric-container">
-            <h4>⏱️ 비행 시간</h4>
+            <h4>⏱️ Duration</h4>
             <h3>{flight_info["duration"]}</h3>
         </div>
         """, unsafe_allow_html=True)
     with detail_col2:
         st.markdown(f"""
         <div class="metric-container">
-            <h4>📏 거리</h4>
+            <h4>📏 Distance</h4>
             <h3>{flight_info["distance"]}</h3>
         </div>
         """, unsafe_allow_html=True)
     with detail_col3:
         st.markdown(f"""
         <div class="metric-container">
-            <h4>📊 현재 상태</h4>
+            <h4>📊 Current Status</h4>
             <h3>{flight_info["status"]}</h3>
         </div>
         """, unsafe_allow_html=True)
 
 def display_airport_departures(airport_code: str):
     """공항 출발편 표시"""
-    st.markdown(f'<h2 class="section-title">🛫 {airport_code} 출발편</h2>', unsafe_allow_html=True)
+    st.markdown(f'<h2 class="section-title">🛫 {airport_code} Departures</h2>', unsafe_allow_html=True)
     
-    with st.spinner("출발편 정보를 조회하는 중..."):
+    with st.spinner("Loading departure information..."):
         time.sleep(1)
         departures = flight_api.get_airport_departures(airport_code)
     
@@ -556,29 +581,29 @@ def display_airport_departures(airport_code: str):
     with col1:
         st.markdown(f"""
         <div class="metric-container">
-            <h4>🟢 정시</h4>
-            <h3>{on_time}편</h3>
+            <h4>🟢 On Time</h4>
+            <h3>{on_time}</h3>
         </div>
         """, unsafe_allow_html=True)
     with col2:
         st.markdown(f"""
         <div class="metric-container">
-            <h4>🟡 지연</h4>
-            <h3>{delayed}편</h3>
+            <h4>🟡 Delayed</h4>
+            <h3>{delayed}</h3>
         </div>
         """, unsafe_allow_html=True)
     with col3:
         st.markdown(f"""
         <div class="metric-container">
-            <h4>🔵 탑승중</h4>
-            <h3>{boarding}편</h3>
+            <h4>🔵 Boarding</h4>
+            <h3>{boarding}</h3>
         </div>
         """, unsafe_allow_html=True)
     with col4:
         st.markdown(f"""
         <div class="metric-container">
-            <h4>✈️ 출발</h4>
-            <h3>{departed}편</h3>
+            <h4>✈️ Departed</h4>
+            <h3>{departed}</h3>
         </div>
         """, unsafe_allow_html=True)
     
@@ -588,9 +613,9 @@ def display_airport_departures(airport_code: str):
 
 def display_airport_arrivals(airport_code: str):
     """공항 도착편 표시"""
-    st.markdown(f'<h2 class="section-title">🛬 {airport_code} 도착편</h2>', unsafe_allow_html=True)
+    st.markdown(f'<h2 class="section-title">🛬 {airport_code} Arrivals</h2>', unsafe_allow_html=True)
     
-    with st.spinner("도착편 정보를 조회하는 중..."):
+    with st.spinner("Loading arrival information..."):
         time.sleep(1)
         arrivals = flight_api.get_airport_arrivals(airport_code)
     
@@ -605,29 +630,29 @@ def display_airport_arrivals(airport_code: str):
     with col1:
         st.markdown(f"""
         <div class="metric-container">
-            <h4>🟢 정시</h4>
-            <h3>{on_time}편</h3>
+            <h4>🟢 On Time</h4>
+            <h3>{on_time}</h3>
         </div>
         """, unsafe_allow_html=True)
     with col2:
         st.markdown(f"""
         <div class="metric-container">
-            <h4>🟡 지연</h4>
-            <h3>{delayed}편</h3>
+            <h4>🟡 Delayed</h4>
+            <h3>{delayed}</h3>
         </div>
         """, unsafe_allow_html=True)
     with col3:
         st.markdown(f"""
         <div class="metric-container">
-            <h4>🛬 착륙</h4>
-            <h3>{landed}편</h3>
+            <h4>🛬 Landed</h4>
+            <h3>{landed}</h3>
         </div>
         """, unsafe_allow_html=True)
     with col4:
         st.markdown(f"""
         <div class="metric-container">
-            <h4>🔄 접근중</h4>
-            <h3>{approaching}편</h3>
+            <h4>🔄 Approaching</h4>
+            <h3>{approaching}</h3>
         </div>
         """, unsafe_allow_html=True)
     
@@ -637,10 +662,10 @@ def display_airport_arrivals(airport_code: str):
 
 def display_flight_tracking(flight_number: str):
     """항공편 추적 표시"""
-    st.markdown(f'<h2 class="section-title">📍 {flight_number} 항공편 추적</h2>', unsafe_allow_html=True)
+    st.markdown(f'<h2 class="section-title">📍 {flight_number} Flight Tracking</h2>', unsafe_allow_html=True)
     
     # 항공편 추적 맵
-    st.markdown('<h3 class="section-title">🗺️ 실시간 추적</h3>', unsafe_allow_html=True)
+    st.markdown('<h3 class="section-title">🗺️ Real-time Tracking</h3>', unsafe_allow_html=True)
     
     # 시뮬레이션된 항공편 위치 데이터
     m = folium.Map(
@@ -696,31 +721,31 @@ def display_flight_tracking(flight_number: str):
     with col1:
         st.markdown(f"""
         <div class="metric-container">
-            <h4>📏 현재 고도</h4>
+            <h4>📏 Current Altitude</h4>
             <h3>35,000 ft</h3>
         </div>
         """, unsafe_allow_html=True)
     with col2:
         st.markdown(f"""
         <div class="metric-container">
-            <h4>⚡ 현재 속도</h4>
+            <h4>⚡ Current Speed</h4>
             <h3>850 km/h</h3>
         </div>
         """, unsafe_allow_html=True)
     with col3:
         st.markdown(f"""
         <div class="metric-container">
-            <h4>📐 남은 거리</h4>
+            <h4>📐 Distance Remaining</h4>
             <h3>650 km</h3>
         </div>
         """, unsafe_allow_html=True)
 
 def display_dashboard():
     """기본 대시보드 표시"""
-    st.markdown('<h2 class="section-title">📊 항공 현황 대시보드</h2>', unsafe_allow_html=True)
+    st.markdown('<h2 class="section-title">📊 Flight Status Dashboard</h2>', unsafe_allow_html=True)
     
     # 주요 공항 현황
-    st.markdown('<h3 class="section-title">🏢 주요 공항 현황</h3>', unsafe_allow_html=True)
+    st.markdown('<h3 class="section-title">🏢 Major Airport Status</h3>', unsafe_allow_html=True)
     
     airports = ["ICN", "NRT", "HND", "PEK", "PVG"]
     airport_data = []
@@ -730,26 +755,26 @@ def display_dashboard():
         arrivals = flight_api.get_airport_arrivals(airport)
         
         airport_data.append({
-            "공항": airport,
-            "출발편": len(departures),
-            "도착편": len(arrivals),
-            "정시율": f"{np.random.randint(85, 98)}%",
-            "지연율": f"{np.random.randint(2, 15)}%"
+            "Airport": airport,
+            "Departures": len(departures),
+            "Arrivals": len(arrivals),
+            "On-Time Rate": f"{np.random.randint(85, 98)}%",
+            "Delay Rate": f"{np.random.randint(2, 15)}%"
         })
     
     df = pd.DataFrame(airport_data)
     st.dataframe(df, use_container_width=True)
     
     # 항공사별 통계
-    st.markdown('<h3 class="section-title">✈️ 항공사별 통계</h3>', unsafe_allow_html=True)
+    st.markdown('<h3 class="section-title">✈️ Airline Statistics</h3>', unsafe_allow_html=True)
     
-    airlines = ["대한항공", "아시아나항공", "일본항공", "전일본공수", "중국국제항공"]
+    airlines = ["Korean Air", "Asiana", "JAL", "ANA", "Air China"]
     flights_count = [np.random.randint(50, 200) for _ in airlines]
     
     fig = px.bar(
         x=airlines,
         y=flights_count,
-        title="항공사별 일일 운항편 수",
+        title="Daily Flights by Airline",
         color=flights_count,
         color_continuous_scale="blues"
     )
@@ -762,7 +787,7 @@ def display_dashboard():
     st.plotly_chart(fig, use_container_width=True)
     
     # 시간대별 운항 현황
-    st.markdown('<h3 class="section-title">⏰ 시간대별 운항 현황</h3>', unsafe_allow_html=True)
+    st.markdown('<h3 class="section-title">⏰ Hourly Flight Status</h3>', unsafe_allow_html=True)
     
     hours = list(range(24))
     flight_counts = [np.random.randint(10, 50) for _ in hours]
@@ -770,7 +795,7 @@ def display_dashboard():
     fig = px.line(
         x=hours,
         y=flight_counts,
-        title="시간대별 운항편 수",
+        title="Flights by Hour",
         markers=True,
         color_discrete_sequence=['#6c757d']
     )
@@ -778,8 +803,8 @@ def display_dashboard():
         plot_bgcolor='white',
         paper_bgcolor='white',
         font_color='#2c3e50',
-        xaxis_title="시간",
-        yaxis_title="운항편 수",
+        xaxis_title="Hour",
+        yaxis_title="Number of Flights",
         height=400
     )
     st.plotly_chart(fig, use_container_width=True)
