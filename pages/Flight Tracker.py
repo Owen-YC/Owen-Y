@@ -497,7 +497,7 @@ def main():
     # 메인 헤더
     st.markdown("""
     <div class="main-header fade-in">
-        <h1 class="main-title">Flight Tracker Advanced</h1>
+        <h1 class="main-title">Flight Tracker</h1>
         <p class="main-subtitle">Advanced Flight Tracking & Analysis System</p>
     </div>
     """, unsafe_allow_html=True)
