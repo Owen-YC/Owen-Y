@@ -477,72 +477,48 @@ def main():
     </div>
     """, unsafe_allow_html=True)
     
-    # 메인 검색 영역 (FlightAware 스타일)
+    # 메인 검색 영역 (Streamlit 네이티브 컴포넌트로 변경)
     st.markdown("""
     <div class="main-search-container fade-in">
         <h2 class="search-title">Search Flights</h2>
         <p class="search-subtitle">FlightAware is at the heart of aviation as a leader in providing accurate and actionable advanced data and insights for all aviation decisions.</p>
-        
-        <div class="search-section">
-            <div class="search-input-group">
-                <label style="color: #2c3e50; font-size: 0.7rem; font-weight: 600; margin-bottom: 0.3rem; display: block;">Search by Flight #:</label>
-                <input type="text" class="search-input" placeholder="Enter flight number" id="flight-search">
-                <button class="search-button">🔍</button>
-            </div>
-            
-            <div class="search-divider">OR</div>
-            
-            <div class="search-input-group">
-                <label style="color: #2c3e50; font-size: 0.7rem; font-weight: 600; margin-bottom: 0.3rem; display: block;">Search by Route:</label>
-                <input type="text" class="search-input" placeholder="Departure" id="departure-search">
-                <span style="color: #6c757d; font-size: 0.7rem;">⇄</span>
-                <input type="text" class="search-input" placeholder="Destination" id="destination-search">
-                <button class="search-button">🔍</button>
-            </div>
-        </div>
     </div>
     """, unsafe_allow_html=True)
     
-    # JavaScript를 별도로 추가
-    st.markdown("""
-    <script>
-    // 검색 버튼 이벤트 리스너
-    document.addEventListener('DOMContentLoaded', function() {
-        // Flight 번호 검색
-        const flightSearchBtn = document.querySelector('#flight-search');
-        if (flightSearchBtn) {
-            flightSearchBtn.addEventListener('click', function() {
-                const flightNumber = document.querySelector('#flight-search').value;
-                if (flightNumber) {
-                    // Streamlit 세션 상태 업데이트
-                    window.parent.postMessage({
-                        type: 'streamlit:setComponentValue',
-                        key: 'flight_search_trigger',
-                        value: flightNumber
-                    }, '*');
-                }
-            });
-        }
-        
-        // Route 검색
-        const routeSearchBtn = document.querySelector('#destination-search').nextElementSibling;
-        if (routeSearchBtn) {
-            routeSearchBtn.addEventListener('click', function() {
-                const departure = document.querySelector('#departure-search').value;
-                const destination = document.querySelector('#destination-search').value;
-                if (departure && destination) {
-                    // Streamlit 세션 상태 업데이트
-                    window.parent.postMessage({
-                        type: 'streamlit:setComponentValue',
-                        key: 'route_search_trigger',
-                        value: {departure: departure, destination: destination}
-                    }, '*');
-                }
-            });
-        }
-    });
-    </script>
-    """, unsafe_allow_html=True)
+    # Flight 번호 검색
+    st.markdown("**Search by Flight #:**")
+    col1, col2 = st.columns([4, 1])
+    with col1:
+        flight_search = st.text_input("", placeholder="Enter flight number", key="main_flight_search", label_visibility="collapsed")
+    with col2:
+        flight_search_btn = st.button("🔍", key="main_flight_btn")
+    
+    # OR 구분자
+    st.markdown('<div style="text-align: center; color: #6c757d; font-size: 0.7rem; margin: 1rem 0;">OR</div>', unsafe_allow_html=True)
+    
+    # Route 검색
+    st.markdown("**Search by Route:**")
+    col1, col2, col3, col4 = st.columns([2, 0.5, 2, 1])
+    with col1:
+        departure_search = st.text_input("", placeholder="Departure", key="main_departure", label_visibility="collapsed")
+    with col2:
+        st.markdown('<div style="text-align: center; color: #6c757d; font-size: 0.7rem; margin-top: 0.5rem;">⇄</div>', unsafe_allow_html=True)
+    with col3:
+        destination_search = st.text_input("", placeholder="Destination", key="main_destination", label_visibility="collapsed")
+    with col4:
+        route_search_btn = st.button("🔍", key="main_route_btn")
+    
+    # 검색 결과 처리
+    if flight_search_btn and flight_search:
+        st.session_state["flight_search"] = True
+        st.session_state["flight_number"] = flight_search
+        st.rerun()
+    
+    if route_search_btn and departure_search and destination_search:
+        st.session_state["route_search"] = True
+        st.session_state["departure"] = departure_search
+        st.session_state["destination"] = destination_search
+        st.rerun()
     
     # 사이드바 (간소화)
     with st.sidebar:
@@ -567,7 +543,14 @@ def main():
             search_button = st.button("📍 Track", key="track_search")
     
     # 메인 컨텐츠
-    if search_type == "Flight Info" and st.session_state.get("flight_search", False):
+    if st.session_state.get("flight_search", False):
+        display_flight_info(st.session_state.get("flight_number", ""))
+        
+    elif st.session_state.get("route_search", False):
+        st.info(f"Route Search: {st.session_state.get('departure', '')} → {st.session_state.get('destination', '')}")
+        # Route 검색 결과 표시 (추후 구현)
+        
+    elif search_type == "Flight Info" and st.session_state.get("flight_search", False):
         display_flight_info(flight_number)
         
     elif search_type == "Departures" and st.session_state.get("airport_search", False):
@@ -581,6 +564,7 @@ def main():
     
     # 기본 대시보드
     if not any([st.session_state.get("flight_search", False), 
+                st.session_state.get("route_search", False),
                 st.session_state.get("airport_search", False), 
                 st.session_state.get("track_search", False)]):
         display_dashboard()
