@@ -63,7 +63,7 @@ st.markdown("""
     }
     
     .main-title {
-        font-size: 1.2rem;
+        font-size: 1.4rem;
         font-weight: 600;
         margin: 0;
         position: relative;
@@ -71,7 +71,7 @@ st.markdown("""
     }
     
     .main-subtitle {
-        font-size: 0.6rem;
+        font-size: 0.75rem;
         opacity: 0.8;
         margin: 0.1rem 0 0 0;
         position: relative;
@@ -83,24 +83,24 @@ st.markdown("""
         background: white;
         border: 1px solid #e1e5e9;
         border-radius: 6px;
-        padding: 0.4rem;
+        padding: 0.5rem;
         margin: 0.3rem 0;
         box-shadow: 0 2px 6px rgba(0,0,0,0.08);
         transition: all 0.3s ease;
         animation: fadeInUp 0.5s ease-out;
         position: relative;
         overflow: hidden;
-        font-size: 0.7rem;
+        font-size: 0.8rem;
     }
     
     .advanced-card h4 {
-        font-size: 0.65rem;
+        font-size: 0.75rem;
         margin: 0 0 0.2rem 0;
         color: #6c757d;
     }
     
     .advanced-card p {
-        font-size: 0.65rem;
+        font-size: 0.7rem;
         margin: 0.1rem 0;
         color: #2c3e50;
     }
@@ -129,7 +129,7 @@ st.markdown("""
     /* 섹션 제목 - 컴팩트 */
     .section-title {
         color: #2c3e50;
-        font-size: 0.9rem;
+        font-size: 1.0rem;
         font-weight: 600;
         margin: 0.8rem 0 0.4rem 0;
         padding-left: 0.5rem;
@@ -149,13 +149,13 @@ st.markdown("""
     }
     
     .metric-container h4 {
-        font-size: 0.7rem;
+        font-size: 0.75rem;
         margin: 0 0 0.3rem 0;
         color: #6c757d;
     }
     
     .metric-container h3 {
-        font-size: 0.9rem;
+        font-size: 1.0rem;
         margin: 0;
         color: #2c3e50;
     }
@@ -174,7 +174,7 @@ st.markdown("""
         border-radius: 6px;
         padding: 0.4rem 1.2rem;
         font-weight: 500;
-        font-size: 0.85rem;
+        font-size: 0.9rem;
         transition: all 0.3s ease;
         box-shadow: 0 2px 6px rgba(108, 117, 125, 0.3);
     }
@@ -197,7 +197,7 @@ st.markdown("""
         border: 1px solid #e1e5e9;
         border-radius: 6px;
         color: #2c3e50;
-        font-size: 0.75rem;
+        font-size: 0.8rem;
         padding: 0.3rem 0.5rem;
     }
     
@@ -221,7 +221,7 @@ st.markdown("""
         border-radius: 6px;
         overflow: hidden;
         border: 1px solid #e1e5e9;
-        font-size: 0.7rem;
+        font-size: 0.75rem;
     }
     
     /* 메인 검색 영역 */
@@ -237,14 +237,14 @@ st.markdown("""
     
     .search-title {
         color: #2c3e50;
-        font-size: 1rem;
+        font-size: 1.1rem;
         font-weight: 600;
         margin-bottom: 0.8rem;
     }
     
     .search-subtitle {
         color: #6c757d;
-        font-size: 0.7rem;
+        font-size: 0.8rem;
         margin-bottom: 1.2rem;
         line-height: 1.4;
     }
