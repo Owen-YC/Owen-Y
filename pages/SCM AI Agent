@@ -3,15 +3,54 @@ from google import genai
 from google.genai import types
 import time
 
+# CSS 스타일 정의 (제목에만 UI/UX 효과)
+def load_css():
+    st.markdown("""
+    <style>
+    /* 타이틀 스타일 - Gray/White 그라데이션 */
+    .main-title {
+        background: linear-gradient(45deg, #495057, #6c757d, #adb5bd, #6c757d);
+        background-size: 400% 400%;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        font-size: 3.5rem;
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 1rem;
+        animation: gradientMove 4s ease-in-out infinite, textGlow 2s ease-in-out infinite alternate;
+        text-shadow: 0 0 20px rgba(108, 117, 125, 0.3);
+        letter-spacing: 1px;
+    }
+    
+    @keyframes gradientMove {
+        0%, 100% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+    }
+    
+    @keyframes textGlow {
+        0% { filter: brightness(1); }
+        100% { filter: brightness(1.1); }
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
 def main():
+    # CSS 로드
+    load_css()
+    
     # --- Streamlit 페이지 설정 ---
     st.set_page_config(
-        page_title="SCM 리스크 전략 챗봇",
-        page_icon="🔗",
+        page_title="SCM AI Agent",
+        page_icon="🤖",
         layout="centered"
     )
-    st.title("🤖 SCM 리스크 전략 챗봇")
-    st.caption("Google 검색을 통해 최신 정보를 반영하여 SCM 리스크 시나리오 전략을 제안합니다.")
+    
+    # 제목 (UI/UX 효과 적용)
+    st.markdown("""
+    <h1 class="main-title">SCM AI Agent</h1>
+    """, unsafe_allow_html=True)
+    st.caption("Suggesting SCM risk scenario strategies by reflecting the latest information.")
 
     # --- API 키 하드코딩 ---
     API_KEY = "AIzaSyCJ1F-HMS4NkQ64f1tDRqJV_N9db0MmKpI"
@@ -19,7 +58,7 @@ def main():
     # --- 챗봇 대화 내역 초기화 ---
     if "messages" not in st.session_state:
         st.session_state.messages = [
-            {"role": "assistant", "content": "안녕하세요! SCM 리스크 전략에 대해 무엇이든 물어보세요."}
+            {"role": "assistant", "content": "안녕하세요! 무엇이든 물어보세요."}
         ]
 
     # --- 이전 대화 내역 출력 ---
