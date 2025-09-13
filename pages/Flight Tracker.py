@@ -172,8 +172,8 @@ st.markdown("""
         border: 1px solid #e1e5e9;
         border-radius: 6px;
         color: #2c3e50;
-        font-size: 0.85rem;
-        padding: 0.4rem 0.6rem;
+        font-size: 0.75rem;
+        padding: 0.3rem 0.5rem;
     }
     
     .stTextInput > div > div > input:focus {
@@ -186,8 +186,8 @@ st.markdown("""
         border: 1px solid #e1e5e9;
         border-radius: 6px;
         color: #2c3e50;
-        font-size: 0.85rem;
-        padding: 0.4rem 0.6rem;
+        font-size: 0.75rem;
+        padding: 0.3rem 0.5rem;
     }
     
     /* 테이블 스타일 */
@@ -196,7 +196,91 @@ st.markdown("""
         border-radius: 6px;
         overflow: hidden;
         border: 1px solid #e1e5e9;
+        font-size: 0.7rem;
+    }
+    
+    /* 메인 검색 영역 */
+    .main-search-container {
+        background: white;
+        border: 1px solid #e1e5e9;
+        border-radius: 8px;
+        padding: 1.5rem;
+        margin: 1rem 0;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        text-align: center;
+    }
+    
+    .search-title {
+        color: #2c3e50;
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+    }
+    
+    .search-subtitle {
+        color: #6c757d;
         font-size: 0.8rem;
+        margin-bottom: 1.5rem;
+        line-height: 1.4;
+    }
+    
+    .search-section {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+        margin: 1rem 0;
+    }
+    
+    .search-divider {
+        color: #6c757d;
+        font-size: 0.7rem;
+        font-weight: 500;
+    }
+    
+    .search-input-group {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .search-input {
+        padding: 0.5rem 0.8rem;
+        border: 1px solid #e1e5e9;
+        border-radius: 6px;
+        font-size: 0.75rem;
+        min-width: 200px;
+    }
+    
+    .search-button {
+        background: #6c757d;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        padding: 0.5rem 0.8rem;
+        font-size: 0.75rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .search-button:hover {
+        background: #495057;
+    }
+    
+    /* JavaScript 스타일 */
+    .search-button {
+        background: #6c757d;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        padding: 0.5rem 0.8rem;
+        font-size: 0.75rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .search-button:hover {
+        background: #495057;
     }
     
     /* 애니메이션 */
@@ -393,9 +477,73 @@ def main():
     </div>
     """, unsafe_allow_html=True)
     
-    # 사이드바
+    # 메인 검색 영역 (FlightAware 스타일)
+    st.markdown("""
+    <div class="main-search-container fade-in">
+        <h2 class="search-title">Search Flights</h2>
+        <p class="search-subtitle">FlightAware is at the heart of aviation as a leader in providing accurate and actionable advanced data and insights for all aviation decisions.</p>
+        
+        <div class="search-section">
+            <div class="search-input-group">
+                <label style="color: #2c3e50; font-size: 0.7rem; font-weight: 600; margin-bottom: 0.3rem; display: block;">Search by Flight #:</label>
+                <input type="text" class="search-input" placeholder="Enter flight number" id="flight-search">
+                <button class="search-button">🔍</button>
+            </div>
+            
+            <div class="search-divider">OR</div>
+            
+            <div class="search-input-group">
+                <label style="color: #2c3e50; font-size: 0.7rem; font-weight: 600; margin-bottom: 0.3rem; display: block;">Search by Route:</label>
+                <input type="text" class="search-input" placeholder="Departure" id="departure-search">
+                <span style="color: #6c757d; font-size: 0.7rem;">⇄</span>
+                <input type="text" class="search-input" placeholder="Destination" id="destination-search">
+                <button class="search-button">🔍</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+    // 검색 버튼 이벤트 리스너
+    document.addEventListener('DOMContentLoaded', function() {
+        // Flight 번호 검색
+        const flightSearchBtn = document.querySelector('#flight-search');
+        if (flightSearchBtn) {
+            flightSearchBtn.addEventListener('click', function() {
+                const flightNumber = document.querySelector('#flight-search').value;
+                if (flightNumber) {
+                    // Streamlit 세션 상태 업데이트
+                    window.parent.postMessage({
+                        type: 'streamlit:setComponentValue',
+                        key: 'flight_search_trigger',
+                        value: flightNumber
+                    }, '*');
+                }
+            });
+        }
+        
+        // Route 검색
+        const routeSearchBtn = document.querySelector('#destination-search').nextElementSibling;
+        if (routeSearchBtn) {
+            routeSearchBtn.addEventListener('click', function() {
+                const departure = document.querySelector('#departure-search').value;
+                const destination = document.querySelector('#destination-search').value;
+                if (departure && destination) {
+                    // Streamlit 세션 상태 업데이트
+                    window.parent.postMessage({
+                        type: 'streamlit:setComponentValue',
+                        key: 'route_search_trigger',
+                        value: {departure: departure, destination: destination}
+                    }, '*');
+                }
+            });
+        }
+    });
+    </script>
+    """, unsafe_allow_html=True)
+    
+    # 사이드바 (간소화)
     with st.sidebar:
-        st.markdown("### Search Options")
+        st.markdown("### Quick Search")
         
         search_type = st.selectbox(
             "Search Type",
