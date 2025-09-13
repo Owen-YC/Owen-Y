@@ -13,8 +13,13 @@ import numpy as np
 from typing import Dict, List, Optional
 import os
 import base64
-from geopy.geocoders import Nominatim
-from timezonefinder import TimezoneFinder
+try:
+    from geopy.geocoders import Nominatim
+    from timezonefinder import TimezoneFinder
+    GEOPY_AVAILABLE = True
+except ImportError:
+    GEOPY_AVAILABLE = False
+    print("Warning: geopy and timezonefinder not available. Some features will be disabled.")
 
 # 페이지 설정
 st.set_page_config(
@@ -355,8 +360,12 @@ class AdvancedFlightAwareAPI:
     def __init__(self):
         self.api_key = os.getenv("FLIGHTAWARE_API_KEY")
         self.base_url = "https://flightxml.flightaware.com/json/FlightXML2"
-        self.geolocator = Nominatim(user_agent="flightaware_app")
-        self.tf = TimezoneFinder()
+        if GEOPY_AVAILABLE:
+            self.geolocator = Nominatim(user_agent="flightaware_app")
+            self.tf = TimezoneFinder()
+        else:
+            self.geolocator = None
+            self.tf = None
         
     def get_flight_info_advanced(self, flight_number: str) -> Dict:
         """고급 항공편 정보 조회"""
