@@ -50,7 +50,7 @@ def main():
     st.markdown("""
     <h1 class="main-title">SCM AI Agent</h1>
     """, unsafe_allow_html=True)
-    st.caption("Google 검색을 통해 최신 정보를 반영하여 SCM 리스크 시나리오 전략을 제안합니다.")
+    st.caption("Suggesting SCM risk scenario strategies by reflecting the latest information.")
 
     # --- API 키 하드코딩 ---
     API_KEY = "AIzaSyCJ1F-HMS4NkQ64f1tDRqJV_N9db0MmKpI"
@@ -58,7 +58,7 @@ def main():
     # --- 챗봇 대화 내역 초기화 ---
     if "messages" not in st.session_state:
         st.session_state.messages = [
-            {"role": "assistant", "content": "안녕하세요! SCM 리스크 전략에 대해 무엇이든 물어보세요."}
+            {"role": "assistant", "content": "안녕하세요! 무엇이든 물어보세요."}
         ]
 
     # --- 이전 대화 내역 출력 ---
