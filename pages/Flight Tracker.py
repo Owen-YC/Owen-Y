@@ -502,12 +502,6 @@ def main():
     </div>
     """, unsafe_allow_html=True)
     
-    # 메인 검색 영역
-    st.markdown("""
-    <div class="main-search-container fade-in">
-        <p class="search-subtitle">FlightAware is at the heart of aviation as a leader in providing accurate and actionable advanced data and insights for all aviation decisions.</p>
-    </div>
-    """, unsafe_allow_html=True)
     
     # Flight 번호 검색
     st.markdown("**Search by Flight #:**")
