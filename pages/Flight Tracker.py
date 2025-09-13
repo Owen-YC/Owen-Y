@@ -129,7 +129,7 @@ st.markdown("""
     /* 섹션 제목 - 컴팩트 */
     .section-title {
         color: #2c3e50;
-        font-size: 1.0rem;
+        font-size: 0.85rem;
         font-weight: 600;
         margin: 0.8rem 0 0.4rem 0;
         padding-left: 0.5rem;
