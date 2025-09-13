@@ -10,7 +10,7 @@ def main():
         page_icon="🔗",
         layout="centered"
     )
-    st.title("🤖 SCM 리스크 전략 챗봇")
+    st.title("SCM AI Agent")
     st.caption("Google 검색을 통해 최신 정보를 반영하여 SCM 리스크 시나리오 전략을 제안합니다.")
 
     # --- API 키 하드코딩 ---
