@@ -32,6 +32,30 @@ def load_css():
         0% { filter: brightness(1); }
         100% { filter: brightness(1.1); }
     }
+    
+    /* 메인 헤더 - 은회색 + Motion */
+    .main-header {
+        background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+        color: white;
+        padding: 1rem 1.5rem;
+        border-radius: 8px;
+        margin-bottom: 1.5rem;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        animation: slideInFromTop 0.8s ease-out;
+    }
+    
+    @keyframes slideInFromTop {
+        from {
+            opacity: 0;
+            transform: translateY(-30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
     </style>
     """, unsafe_allow_html=True)
 
@@ -50,7 +74,13 @@ def main():
     st.markdown("""
     <h1 class="main-title">SCM AI Agent</h1>
     """, unsafe_allow_html=True)
-    st.caption("Suggesting SCM risk scenario strategies by reflecting the latest information.")
+    
+    # 메인 헤더
+    st.markdown("""
+    <div class="main-header">
+        <h3 style="margin: 0; font-size: 1.2rem; font-weight: 600;">Suggesting SCM risk scenario strategies by reflecting the latest information.</h3>
+    </div>
+    """, unsafe_allow_html=True)
 
     # --- API 키 하드코딩 ---
     API_KEY = "AIzaSyCJ1F-HMS4NkQ64f1tDRqJV_N9db0MmKpI"
