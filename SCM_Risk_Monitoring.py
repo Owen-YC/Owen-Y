@@ -24,7 +24,7 @@ import concurrent.futures
 
 # 페이지 설정
 st.set_page_config(
-    page_title="🚨 SCM Risk Monitor",
+    page_title="SCM Risk Monitor",
     page_icon="🚨",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -1855,29 +1855,38 @@ def generate_scm_backup_news(num_results: int, search_query: str = None) -> List
     return articles
 
 def main():
-    # URL 파라미터 처리 (지역 검색)
-    query_params = st.query_params
-    if 'location_search' in query_params:
-        location_search_query = query_params['location_search']
-        # URL 파라미터 제거
-        st.query_params.clear()
-        
-        # 지역 검색 실행
-        with st.spinner(f"Searching for: {location_search_query}..."):
-            try:
-                new_articles = crawl_scm_risk_news(100, location_search_query)
-                if new_articles:
-                    st.session_state.scm_articles = new_articles
-                    st.session_state.scm_load_time = datetime.now().strftime('%H:%M')
-                    st.session_state.search_query = location_search_query
-                    st.session_state.last_search = location_search_query
-                    st.session_state.current_page = 1
-                    st.session_state.show_all_news = False
-                    st.success(f"✅ Found {len(new_articles)} articles for '{location_search_query}'")
-                else:
-                    st.warning(f"No articles found for '{location_search_query}'")
-            except Exception as e:
-                st.error(f"Search error: {e}")
+    # URL 파라미터 처리 (지역 검색) - 안전한 방식으로 처리
+    try:
+        # Streamlit의 query_params가 사용 가능한지 확인
+        if hasattr(st, 'query_params'):
+            query_params = st.query_params
+            if 'location_search' in query_params:
+                location_search_query = query_params['location_search']
+                # URL 파라미터 제거
+                try:
+                    st.query_params.clear()
+                except:
+                    pass  # clear() 메서드가 실패해도 계속 진행
+                
+                # 지역 검색 실행
+                with st.spinner(f"Searching for: {location_search_query}..."):
+                    try:
+                        new_articles = crawl_scm_risk_news(100, location_search_query)
+                        if new_articles:
+                            st.session_state.scm_articles = new_articles
+                            st.session_state.scm_load_time = datetime.now().strftime('%H:%M')
+                            st.session_state.search_query = location_search_query
+                            st.session_state.last_search = location_search_query
+                            st.session_state.current_page = 1
+                            st.session_state.show_all_news = False
+                            st.success(f"✅ Found {len(new_articles)} articles for '{location_search_query}'")
+                        else:
+                            st.warning(f"No articles found for '{location_search_query}'")
+                    except Exception as e:
+                        st.error(f"Search error: {e}")
+    except Exception as e:
+        # URL 파라미터 처리 실패 시 무시하고 계속 진행
+        pass
     
     # 메인 헤더
     st.markdown("""
